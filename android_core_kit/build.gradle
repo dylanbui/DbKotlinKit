@@ -1,0 +1,88 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation supportDependencies.testJunit
+    androidTestImplementation supportDependencies.testExtJunit
+    androidTestImplementation supportDependencies.testEspressoCore
+
+    implementation supportDependencies.design
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.kotlinStdlibJdk7
+
+    implementation supportDependencies.coreKtx
+    implementation supportDependencies.constraintLayout
+
+    // Firebase
+    implementation supportDependencies.firebaseCore
+    // Firebase Push notification
+    implementation supportDependencies.firebaseConfig
+    implementation supportDependencies.firebaseCore
+    implementation supportDependencies.firebaseMessaging
+
+    // coroutines
+    implementation supportDependencies.coroutines
+    // gson
+    implementation supportDependencies.gson
+    // load image glide
+    implementation supportDependencies.glide
+    // eventbus
+    implementation supportDependencies.eventbus
+
+    // Reactive
+    implementation supportDependencies.rxkotlin
+    implementation supportDependencies.rxandroid
+
+    // Google Services
+    implementation supportDependencies.ggServicesMaps
+    implementation supportDependencies.ggServicesLocation
+    implementation supportDependencies.ggServicesAds
+    implementation supportDependencies.ggServicesGcm
+
+    // Conductor
+    implementation supportDependencies.conductor
+    // MVP Conductor Plugin
+    implementation supportDependencies.conductorMvp
+
+    // Support application lifecycle
+    implementation supportDependencies.archLifecycle
+
+}

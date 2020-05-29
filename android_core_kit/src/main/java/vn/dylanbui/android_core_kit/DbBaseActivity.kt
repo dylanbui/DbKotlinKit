@@ -1,0 +1,150 @@
+package vn.dylanbui.android_core_kit
+
+import android.app.Dialog
+
+import android.os.Bundle
+import android.view.View
+import android.view.Window
+import android.view.animation.AnimationUtils
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import vn.dylanbui.android_core_kit.permission_manager.DbPermissionManager
+import vn.dylanbui.android_core_kit.permission_manager.DbPermissionManagerImpl
+import vn.dylanbui.android_core_kit.permission_manager.DbPermissionRequestExplanation
+import vn.dylanbui.android_core_kit.permission_manager.DbPermissionResult
+import vn.dylanbui.android_core_kit.utils.DbUtils
+
+
+abstract class DbBaseActivity : AppCompatActivity() {
+
+    abstract fun getActivityLayoutId(): Int
+
+    open fun getToolBarLayoutId(): Int? = null
+
+    open val permissionManager: DbPermissionManager = DbPermissionManagerImpl
+
+    open var toolbar: Toolbar? = null
+    open var alertDialog: Dialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // In Activity's onCreate() for instance
+        // Cho phep full man hinh
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            //var w = getWindow()
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//            )
+//            // An thanh navigation cua device
+//            window.decorView.apply {
+//                // Hide both the navigation bar and the status bar.
+//                // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+//                // a general rule, you should design your app to hide the status bar whenever you
+//                // hide the navigation bar.
+//                systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+//            }
+//        }
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        setContentView(getActivityLayoutId())
+
+        // Allow toolbar null
+        getToolBarLayoutId()?.let {
+            toolbar = findViewById(it)
+            toolbar?.let { tool ->
+                setSupportActionBar(tool)
+            }
+        }
+
+        this.alertDialog = DbUtils.makeProgressDialog(this, this.getString(R.string.loading_title))
+
+        onViewBound()
+    }
+
+//    fun getStringResource(resourceString: Int): String = resources.getString(resourceString)
+//    fun getContext(): Context = this
+
+    open fun onViewBound() {
+    }
+
+    fun setToolBarTitle(title: String?) {
+        // toolbar_custom.title = title
+
+        var txtTitle = getToolbarTitle() as? TextView
+        txtTitle?.let {
+            it.text = title
+            val animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+            it.startAnimation(animation)
+
+        }
+
+    }
+
+    fun enableUpArrow(enabled: Boolean) {
+        toolbar?.let {
+            if (enabled) {
+                it.setNavigationIcon(R.drawable.ic_arrow_back)
+                it.setNavigationOnClickListener { _ ->
+                    onBackPressed()
+//                    if (router.backstackSize > 1) {
+//                        router.popCurrentController()
+//                        // Toast.makeText(this, "setNavigationOnClickListener", Toast.LENGTH_LONG).show()
+//                    }
+                }
+            } else {
+                it.navigationIcon = null
+            }
+        }
+
+    }
+
+    fun enableToolBar(enabled: Boolean) {
+        if (enabled) {
+            toolbar?.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+            toolbar?.startAnimation(animation)
+        } else {
+            toolbar?.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+            toolbar?.startAnimation(animation)
+
+        }
+    }
+
+    private fun getToolbarTitle(): View? {
+        toolbar?.let {
+            val childCount = it.childCount
+            for (i in 0 until childCount) {
+                val child: View = it.getChildAt(i)
+                if (child is TextView) {
+                    return child
+                }
+            }
+        }
+        return null
+    }
+
+    /**
+     * check permission
+     *
+     */
+    fun checkPermissions(permissions: Array<out String>,
+                         onPermissionResult: ((DbPermissionResult) -> Unit)?,
+                         permissionRequestPreExecuteExplanation: DbPermissionRequestExplanation? = null,
+                         permissionRequestRetryExplanation: DbPermissionRequestExplanation? = null,
+                         requestCode: Int? = null): Boolean {
+        return permissionManager.checkPermissions(this,
+            permissions,
+            onPermissionResult,
+            permissionRequestPreExecuteExplanation,
+            permissionRequestRetryExplanation,
+            requestCode)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            ?: super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+}

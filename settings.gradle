@@ -1,0 +1,3 @@
+rootProject.name='DbKotlinApp'
+include ':app'
+include ':android_core_kit'

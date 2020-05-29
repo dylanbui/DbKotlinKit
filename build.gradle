@@ -1,0 +1,123 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.3.61'
+    ext.gradle_version = '3.5.3'
+    ext.google_service_version = '4.3.3'
+    ext.realm = '5.9.0'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${gradle_version}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.gms:google-services:$google_service_version"
+        classpath "io.realm:realm-gradle-plugin:$realm"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://linphone.org/maven_repository/" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+ext {
+
+    //Support Libraries dependencies
+    supportDependencies = [
+            // Test
+            testJunit           : "junit:junit:4.12",
+            testExtJunit        : "androidx.test.ext:junit:1.1.1",
+            testEspressoCore    : "androidx.test.espresso:espresso-core:3.2.0",
+
+            // Kotlin + Android UI
+            kotlinStdlibJdk7    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
+            appCompat           : "androidx.appcompat:appcompat:1.1.0",
+            coreKtx             : "androidx.core:core-ktx:1.1.0",
+            constraintLayout    : "com.android.support.constraint:constraint-layout:1.1.3",
+            design              : "com.android.support:design:27.1.0",
+
+            coroutines          : "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3",
+
+            // Firebase push notification
+            firebaseMessaging   : 'com.google.firebase:firebase-messaging:20.1.0',
+            firebaseConfig      : 'com.google.firebase:firebase-config:19.1.0',
+            firebaseCore        : 'com.google.firebase:firebase-core:17.2.1',
+            firebaseStore       : 'com.google.firebase:firebase-storage:19.1.1',
+            firebaseAuth        : 'com.google.firebase:firebase-auth:19.2.0',
+            firebaseDatabase    : 'com.google.firebase:firebase-database:19.2.1',
+            firebaseAnalytics   : 'com.google.firebase:firebase-analytics:17.2.2',
+
+            gson                : "com.google.code.gson:gson:2.8.5",
+            glide               : "com.github.bumptech.glide:glide:3.8.0",
+
+            retrofit            : "com.squareup.retrofit2:retrofit:2.6.2",
+            retrofitRxjava      : "com.squareup.retrofit2:adapter-rxjava2:2.7.1",
+            retrofitGson        : "com.squareup.retrofit2:converter-gson:2.6.2",
+            retrofitLog         : "com.squareup.okhttp3:logging-interceptor:4.2.1",
+            // picasso            : "com.squareup.picasso:picasso:2.71828",
+
+            eventbus            : "org.greenrobot:eventbus:3.1.1",
+            rxkotlin            : "io.reactivex.rxjava2:rxkotlin:2.2.0",
+            rxandroid           : "io.reactivex.rxjava2:rxandroid:2.0.1",
+            rxjavaadapter       : "com.squareup.retrofit2:adapter-rxjava2:2.1.1-SNAPSHOT",
+
+            // If you want the components that go along with
+            // Android's support libraries (currently just a PagerAdapter):
+            conductor           : "com.bluelinelabs:conductor:3.0.0-rc1",
+            conductorSupport    : "com.bluelinelabs:conductor-support:3.0.0-rc1",
+
+            conductorMvp        : "com.hannesdorfmann.mosby3:mvp-conductor:3.1.0",
+
+            // Support application lifecycle
+            archLifecycle       : "android.arch.lifecycle:extensions:1.1.1",
+
+            lottie              : "com.airbnb.android:lottie:2.7.0",
+
+            // realm extendtions
+            kRealmExtensions    : "com.github.vicpinm:krealmextensions:2.5.0",
+
+            // Google Services
+            ggServicesLocation  : 'com.google.android.gms:play-services-location:15.0.1',
+            ggServicesAds       : 'com.google.android.gms:play-services-ads:15.0.0',
+            ggServicesGcm       : 'com.google.android.gms:play-services-gcm:15.0.1',
+            ggServicesMaps      : 'com.google.android.gms:play-services-maps:15.0.1',
+            ggServicesPlaces    : 'com.google.android.gms:play-services-places:15.0.1',
+
+            // circleImageview
+            circleimageview     : 'de.hdodenhof:circleimageview:3.1.0',
+
+            // SmartTabLayout
+            smartTabLayout      : "com.ogaclejapan.smarttablayout:library:2.0.0@aar",
+            //Optional: see how to use the utility.
+            smartTabLayoutUtils : "com.ogaclejapan.smarttablayout:utils-v4:2.0.0@aar",
+
+            // MPAndroidChart
+            mpAndroidChart      : "com.github.PhilJay:MPAndroidChart:v3.1.0",
+
+            // Calendar dialog
+            sublimePicker       : "com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.2",
+
+            // Advanced Recyclerview
+            advRecyclerview     : "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0",
+
+            // MergeRecyclerAdapter
+            mergeRecyclerAdapter: "androidx.recyclerview:recyclerview:1.2.0-alpha03",
+
+            //Pagination
+            pagination          : "androidx.paging:paging-runtime:2.1.2"
+
+    ]
+
+}

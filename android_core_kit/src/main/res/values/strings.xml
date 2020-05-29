@@ -1,0 +1,33 @@
+<resources>
+  <string name="app_name">library</string>
+
+  <string name="ok">Ok</string>
+  <string name="cancel">Cancel</string>
+
+
+  <string name="hour">giờ</string>
+  <string name="day">ngày</string>
+  <string name="month">tháng</string>
+  <string name="year">năm</string>
+
+  <string name="common_yes">Có</string>
+  <string name="common_no">Không</string>
+
+  <string name="version">Phiên bản</string>
+  <string name="loading_title">Đang xử lý...</string>
+
+
+  <string name="error_processing_places_api">Error processing Places API URL</string>
+  <string name="error_connecting_to_places_api">Error connecting to Places API</string>
+  <string name="error_cannot_process_json_results">Cannot process JSON results</string>
+  <string name="error_lib_not_initialized">Please initialize the api before using it</string>
+
+  <!-- For DbPermissionManager -->
+  <string name="permission_request_explanation_btn_ok_text">ok</string>
+  <string name="permission_request_explanation_btn_grant_text">grant</string>
+  <string name="permission_request_explanation_btn_deny_text">deny</string>
+
+  <!-- For DbPushManager -->
+  <string name="default_notification_channel_id">default_channel</string>
+
+</resources>
