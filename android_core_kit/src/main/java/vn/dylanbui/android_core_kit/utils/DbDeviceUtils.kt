@@ -23,7 +23,7 @@ object DbDeviceUtils {
         return netInfo != null && netInfo.isConnected
     }
 
-//    fun getVersionName(): String = Build.VERSION.RELEASE
+    fun getVersionName(): String = Build.VERSION.RELEASE
 
     fun getVersionApp(context: Context): String {
         var result = ""

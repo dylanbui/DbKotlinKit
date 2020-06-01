@@ -135,7 +135,7 @@ dependencies {
     implementation supportDependencies.mergeRecyclerAdapter
     implementation supportDependencies.pagination
 
-    // implementation project(':android_core_kit')
+    implementation project(':android_core_kit')
 
 }
 

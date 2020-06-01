@@ -1,12 +1,73 @@
 <resources>
-    <string name="app_name">DbKotlinApp</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="app_name">RouterApp</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="greeting_loading_error">greeting loading error</string>
+
+    <string name="hour">giờ</string>
+    <string name="day">ngày</string>
+    <string name="month">tháng</string>
+    <string name="year">năm</string>
+
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
+
+    <string name="version">Phiên bản</string>
+    <string name="loading_title">Đang xử lý...</string>
+
+
+    <!-- FONT STRING -->
+    <string name="font_awesome">font_awesome.ttf</string>
+    <string name="font_regular">helveticaneue.ttf</string>
+    <string name="font_bold">helveticaneuebold.ttf</string>
+    <string name="font_bold_italic">helveticaneuebolditalic.ttf</string>
+    <string name="font_condensedblack">helveticaneuecondensedblack.ttf</string>
+    <string name="font_condensedbold">helveticaneuecondensedbold.ttf</string>
+    <string name="font_italic">helveticaneueitalic.ttf</string>
+    <string name="font_light">helveticaneuelight.ttf</string>
+    <string name="font_lightitalic">helveticaneuelightitalic.ttf</string>
+    <string name="font_medium">helveticaneuemedium.ttf</string>
+    <string name="font_ltralight">helveticaneueultralight.ttf</string>
+    <string name="font_ltralightitalic">helveticaneueultralightitalic.ttf</string>
+
+    <!-- TEXTEDIT AUTO COMPLETE -->
+    <string name="type_in_your_location">Type in your Location</string>
+    <string name="street">Street</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="country">Country</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="place_id">Place ID</string>
+    <string name="url">URL</string>
+    <string name="utc_offset">UTC Offset</string>
+    <string name="vicinity">Vicinity</string>
+    <string name="compound_code">Compound Code</string>
+    <string name="global_code">Global Code</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <!-- Time -->
+    <string name="history_date_format" translatable="false">EEE d MMM</string>
+    <string name="history_detail_date_format" translatable="false">yyyy/MM/dd - HH:mm</string>
+    <string name="inapp_popup_date_format" translatable="false">yyyy/MM/dd</string>
+    <string name="inapp_popup_date_day" translatable="false">dd</string>
+    <string name="messages_date_format" translatable="false">dd/MM, HH:mm</string>
+    <string name="messages_list_date_format" translatable="false">dd/MM</string>
+    <string name="today_date_format" translatable="false">HH:mm</string>s
+
+    <!-- Errors -->
+    <string name="error">Error</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_call_declined">Call declined</string>
+    <string name="error_user_busy">User busy</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="error_incompatible_media">Incompatible media parameters</string>
+    <string name="error_low_bandwidth">Your caller has low bandwidth, video cannot be started</string>
+    <string name="error_network_unreachable">Network is unreachable</string>
+    <string name="error_bad_credentials">Bad credentials</string>
+    <string name="error_unauthorized">Unauthorized</string>
+    <string name="error_io_error">Network error</string>
+
 </resources>

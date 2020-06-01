@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:background="@color/orange_dark"
             android:gravity="center"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />
 

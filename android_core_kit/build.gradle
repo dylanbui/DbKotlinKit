@@ -60,6 +60,7 @@ dependencies {
 
     // coroutines
     implementation supportDependencies.coroutines
+
     // gson
     implementation supportDependencies.gson
     // load image glide
