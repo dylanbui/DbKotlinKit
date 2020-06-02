@@ -51,15 +51,22 @@ dependencies {
     implementation supportDependencies.coreKtx
     implementation supportDependencies.constraintLayout
 
+    // retrofit
+    implementation supportDependencies.retrofit
+    annotationProcessor supportDependencies.retrofit
+    implementation supportDependencies.retrofitRxjava
+    implementation supportDependencies.retrofitGson
+    implementation supportDependencies.retrofitLog
+
+    // coroutines
+    implementation supportDependencies.coroutines
+
     // Firebase
     implementation supportDependencies.firebaseCore
     // Firebase Push notification
     implementation supportDependencies.firebaseConfig
     implementation supportDependencies.firebaseCore
     implementation supportDependencies.firebaseMessaging
-
-    // coroutines
-    implementation supportDependencies.coroutines
 
     // gson
     implementation supportDependencies.gson

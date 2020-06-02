@@ -42,20 +42,13 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
     override fun start() {
         // var vcl = PostListViewController()
 
-//        var vcl = SplashViewController()
-        // var vcl = PlaceAutoCompleteViewController()
-        // var vcl = ViewPhotoViewController()
-//         var vcl = GoogleMapViewController()
-//        var vcl = MainTabarController()
-        // var vcl = CustomTabbarController()
-        // var vcl = DemoBottomSheetViewController()
+        var vcl = SplashViewController()
+
         //var vcl = LoginViewController()
         //var vcl = UploadProgressController()
         // var vcl = FormatEditTextController()
-
-//        var vcl = NumericKeyboardController()
-//
-//        router.setRoot(RouterTransaction.with(vcl))
+        
+        router.setRoot(RouterTransaction.with(vcl))
 
 //        router.setRoot(RouterTransaction.with(FirstViewController())
 //            .pushChangeHandler(FadeChangeHandler())

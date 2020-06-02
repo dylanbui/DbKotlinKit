@@ -33,7 +33,7 @@ object DbDeviceUtils {
             info = manager.getPackageInfo(
                 context.packageName, 0
             )
-            result = info!!.versionName
+            result = info?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

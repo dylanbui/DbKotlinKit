@@ -5,8 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
-import com.bluelinelabs.conductor.Controller
+import kotlinx.android.synthetic.main.controller_splash.view.*
+import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
+import vn.dylanbui.android_core_kit.utils.dLog
 
 import vn.dylanbui.dbkotlinapp.R
 
@@ -24,50 +27,35 @@ import vn.dylanbui.dbkotlinapp.R
 //}
 // Example: animationView.addAnimatorListener(AnimatorListenerAdapter(onEnd = { _ ->  }))
 
-class DistrictUnit {
 
-    var districtId: Int? = null
-
-    var countryId: Int? = null
-    var regionId: Int? = null
-    var cityId: Int? = null
-    var orders: Int? = null
-
-    var districtName: String? = null
-    var districtShortName: String? = null
-    var districtNameEn: String? = null
-    var districtNameEnLower:String?=null
-    var districtNameLower: String? = null
-    var districtShortNameLower: String? = null
-
-}
-
-
-
-
-class SplashViewController: Controller(), Animator.AnimatorListener
+class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewModel::class.java), Animator.AnimatorListener
 {
-
-
     lateinit var animationView: LottieAnimationView
 
-    // var prensenter = SplashPresenter()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View
-    {
-        var view: View = inflater.inflate(R.layout.controller_splash, container, false)
-        onViewBound(view)
-        return view
-    }
-
-    private fun setTitle(): String = "Title first"
+    override fun setTitle(): String = "Title first"
 
     private var updateDone: Boolean = false
 
-    private fun onViewBound(view: View)
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
+        return inflater.inflate(R.layout.controller_splash, container, false)
+    }
+
+    override fun onPreAttach() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onViewBound(view: View)
     {
         animationView = view.findViewById(R.id.lottieAnimationView)
         animationView.addAnimatorListener(this)
+
+        this.viewModel.getLiveData().observe(this, Observer<String> {
+            this.view?.run {
+                // text.text = "ViewModel created at: $it"
+                dLog("ViewModel created at: $it")
+                tvAppVersion.text = "ViewModel created at: $it"
+            }
+        })
 
 
 //        btnFirst = view.findViewById(R.id.btnFirst)
@@ -167,13 +155,12 @@ class SplashViewController: Controller(), Animator.AnimatorListener
         Log.d("TAG", "onAnimationEnd")
         // activity?.toast("onAnimationEnd")
 
-        nav?.navigate(ApplicationRoute.SplashPageComplete())
+        // nav?.navigate(ApplicationRoute.SplashPageComplete())
     }
 
     override fun onAnimationCancel(animation: Animator?) {
         Log.d("TAG", "onAnimationCancel")
 
     }
-
 
 }

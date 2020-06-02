@@ -7,13 +7,14 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 
 import vn.dylanbui.android_core_kit.DbBaseActivity
+import vn.dylanbui.dbkotlinapp.app_coordinator.AppCoordinator
 
 
 class MainActivity : DbBaseActivity() {
 
     private lateinit var container: ViewGroup
     private lateinit var router: Router
-    // var appCoordinator: AppCoordinator? = null
+    private var appCoordinator: AppCoordinator? = null
 
     override fun getActivityLayoutId(): Int = R.layout.activity_main
 
@@ -30,8 +31,8 @@ class MainActivity : DbBaseActivity() {
         container = findViewById(R.id.controller_container)
         router = Conductor.attachRouter(this, container, savedInstanceState)
 
-//        appCoordinator = AppCoordinator(router)
-//        appCoordinator?.start()
+        appCoordinator = AppCoordinator(router)
+        appCoordinator?.start()
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

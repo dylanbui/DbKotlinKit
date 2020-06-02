@@ -7,6 +7,7 @@
     android:background="@mipmap/bg_splash_screen">
 
     <TextView
+        android:id="@+id/tvAppVersion"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
