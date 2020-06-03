@@ -23,6 +23,7 @@ import vn.dylanbui.android_core_kit.utils.DbLog
 import vn.dylanbui.android_core_kit.utils.DbSharedPreferences
 import vn.dylanbui.dbkotlinapp.networking.DbRealmCacheManager
 import vn.dylanbui.dbkotlinapp.networking.PzNetwork
+import vn.dylanbui.dbkotlinapp.networking.TypicodeNetwork
 
 class User {
     @SerializedName("userId")
@@ -87,7 +88,8 @@ class App : Application(), LifecycleObserver {
         // https://developer.android.com/topic/libraries/architecture/lifecycle
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        PzNetwork.initWithBaseUrl("http://app.propzy.vn:9090/sam/api/", DbRealmCacheManager())
+        // PzNetwork.initWithBaseUrl("http://app.propzy.vn:9090/sam/api/", DbRealmCacheManager())
+        TypicodeNetwork.initWithBaseUrl("https://jsonplaceholder.typicode.com/", DbRealmCacheManager(), BuildConfig.DEBUG)
 
         // AppNetwork.setBaseUrl("http://45.117.162.50:8080/file/api/")
 //        AppNetwork.setBaseUrl("http://app.propzy.vn:9090/sam/api/")

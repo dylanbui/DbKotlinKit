@@ -3,6 +3,10 @@ package vn.dylanbui.android_core_kit
 import org.greenrobot.eventbus.EventBus
 
 typealias DictionaryType = HashMap<String, Any?>
+/*
+val map: HashMap<Int, String> = hashMapOf(1 to "x", 2 to "y", -1 to "zz")
+println(map) // {-1=zz, 1=x, 2=y}
+* */
 
 interface DbError {} // Use for save error
 

@@ -3,6 +3,7 @@ package vn.dylanbui.android_core_kit.networking
 import android.util.Log
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -15,10 +16,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import vn.dylanbui.android_core_kit.DictionaryType
+import vn.dylanbui.android_core_kit.mvp_structure.bgDispatcher
+import vn.dylanbui.android_core_kit.mvp_structure.uiDispatcher
 import vn.dylanbui.android_core_kit.utils.DbJson
 import vn.dylanbui.android_core_kit.utils.dLog
 
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
 
 internal class SimpleResponse {
 
@@ -41,18 +45,22 @@ internal interface INetworkService {
 // typealias DbPairResponse = Pair<DbResponse?, DbNetworkError?>
 
 // open class DbNetwork<M: DbResponse>(private var modelClass: Class<M>, private var baseUrl: String = "") {
-open class DbNetwork<M: DbResponse>(var baseUrl: String = "") {
+open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): CoroutineScope {
+
+    // This launch uses the coroutineContext defined
+    // by the coroutine presenter.
+    protected val job = Job()
+    override val coroutineContext: CoroutineContext = job + Dispatchers.IO
 
     // private var makeLink: (String) -> String = { url -> url}
     // var makeLink: ((String) -> String)? = null
     var cacheManager: ICacheManager? = null
     var showDebug: Boolean = false
 
-    init {
-
-    }
-
     // private var BASE_URL = "" //"http://45.117.162.60:8080/diy/api/"
+
+    // Set at Application()
+    abstract fun initWithBaseUrl(baseUrl: String, cacheManager: ICacheManager? = null, debugMode: Boolean = false)
 
     private val makeApiService: INetworkService by lazy {
         // -- Log for Retrofit --
@@ -84,6 +92,34 @@ open class DbNetwork<M: DbResponse>(var baseUrl: String = "") {
 
         // Create Retrofit client
         return@lazy retrofit.create(INetworkService::class.java)
+    }
+
+    // --- Network Utility Functions
+
+    inline fun <reified T> doBasicRequest(
+        path: String, method: DbNetworkMethod, params: DictionaryType? = null,
+        threadCallback: CoroutineDispatcher = uiDispatcher,
+        crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
+    ) = launch(bgDispatcher) {
+
+        val request = DbNetworkRequest(path, method)
+        request.params = params
+
+        // -- Call Asynchronously Task --
+        doBasicRequest<T>(request, threadCallback, onResponse)
+    }
+
+    inline fun <reified T> doBasicRequest(request: DbNetworkRequest,
+                                          threadCallback: CoroutineDispatcher = uiDispatcher,
+                                          crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
+    ) = launch(bgDispatcher) {
+        // -- Call Synchronously Task --
+        val (responseBody, error) = doBasicExecute<T>(request)
+
+        // Update on thread, default is UI Thread
+        withContext(threadCallback) {
+            onResponse(responseBody, error)
+        }
     }
 
     // --- Network Suspend Functions
@@ -201,7 +237,7 @@ open class DbNetwork<M: DbResponse>(var baseUrl: String = "") {
 
     // TODO: phai kiem tra lai toan bo cho nay, Toan bo qua trinh goi deu la Synchronously
 
-    fun cacheExisted(request: DbNetworkRequest): Boolean {
+    open fun cacheExisted(request: DbNetworkRequest): Boolean {
         if (request.cache != null) {
             return cacheManager?.existed(request.cache!!.key) ?: false
         }

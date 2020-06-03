@@ -24,6 +24,15 @@ fun loading() = DbResult.Loading
 fun emptyResult() = DbResult.Empty
 fun errorResult(code: Int, message: String) = DbResult.Error(code, message)
 
+fun <K, V> lazyMap(initializer: (K) -> V): Map<K, V> {
+    val map = mutableMapOf<K, V>()
+    return map.withDefault { key ->
+        val newValue = initializer(key)
+        map[key] = newValue
+        return@withDefault newValue
+    }
+}
+
 
 /*
 

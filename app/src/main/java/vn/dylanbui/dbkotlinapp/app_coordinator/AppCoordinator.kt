@@ -47,7 +47,7 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
         //var vcl = LoginViewController()
         //var vcl = UploadProgressController()
         // var vcl = FormatEditTextController()
-        
+
         router.setRoot(RouterTransaction.with(vcl))
 
 //        router.setRoot(RouterTransaction.with(FirstViewController())

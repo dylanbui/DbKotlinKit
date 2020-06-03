@@ -4,13 +4,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import vn.dylanbui.android_core_kit.DictionaryType
 import vn.dylanbui.android_core_kit.mvp_structure.bgDispatcher
 import vn.dylanbui.android_core_kit.mvp_structure.uiDispatcher
 import vn.dylanbui.android_core_kit.networking.*
 import vn.dylanbui.android_core_kit.utils.dLog
-import kotlin.coroutines.CoroutineContext
 
 
 /**
@@ -33,42 +34,34 @@ class PzResponse: DbResponse() {
 
 }
 
-object PzNetwork : DbNetwork<PzResponse>(), CoroutineScope {
-
-    // This launch uses the coroutineContext defined
-    // by the coroutine presenter.
-    private val job = Job()
-    override val coroutineContext: CoroutineContext = job + Dispatchers.IO
-
-    init {
-        println("Singleton class invoked.")
-    }
+object PzNetwork : DbNetwork<PzResponse>() {
 
     // Set at Application()
-    fun initWithBaseUrl(str: String, cacheManager: ICacheManager? = null) {
-        this.baseUrl = str
+    override fun initWithBaseUrl(baseUrl: String, cacheManager: ICacheManager?, debugMode: Boolean) {
+        this.baseUrl = baseUrl
         this.cacheManager = cacheManager
+        this.showDebug = debugMode
     }
 
-    // --- Network Utility Functions
+    // --- Network Utility Functions custom For Propzy
 
-    inline fun <reified T> doRequest(
-        path: String, method: DbNetworkMethod, params: DictionaryType? = null,
-        threadCallback: CoroutineDispatcher = uiDispatcher,
-        crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
-    ) = launch(bgDispatcher) {
-
-        val request = DbNetworkRequest(path, method)
-        request.params = params
-
-        // -- Call Synchronously Task --
-        val (responseBody, error) = doBasicExecute<T>(request)
-
-        // Update on thread, default is UI Thread
-        withContext(threadCallback) {
-            onResponse(responseBody, error)
-        }
-    }
+//    inline fun <reified T> doRequest(
+//        path: String, method: DbNetworkMethod, params: DictionaryType? = null,
+//        threadCallback: CoroutineDispatcher = uiDispatcher,
+//        crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
+//    ) = launch(bgDispatcher) {
+//
+//        val request = DbNetworkRequest(path, method)
+//        request.params = params
+//
+//        // -- Call Synchronously Task --
+//        val (responseBody, error) = doBasicExecute<T>(request)
+//
+//        // Update on thread, default is UI Thread
+//        withContext(threadCallback) {
+//            onResponse(responseBody, error)
+//        }
+//    }
 
     inline fun <reified T> doRequestList(
         path: String, method: DbNetworkMethod, params: DictionaryType? = null,
@@ -129,23 +122,24 @@ object PzNetwork : DbNetwork<PzResponse>(), CoroutineScope {
         return Pair(result, returnError)
     }
 
-    fun doRequestBasic(
-        path: String, method: DbNetworkMethod, params: DictionaryType? = null,
-        threadCallback: CoroutineDispatcher = uiDispatcher,
-        onResponse: (cloudResponse: PzResponse?, errorData: DbNetworkError?) -> Unit
-    ) = launch(bgDispatcher) {
+//    fun doRequestBasic(
+//        path: String, method: DbNetworkMethod, params: DictionaryType? = null,
+//        threadCallback: CoroutineDispatcher = uiDispatcher,
+//        onResponse: (cloudResponse: PzResponse?, errorData: DbNetworkError?) -> Unit
+//    ) = launch(bgDispatcher) {
+//
+//        val request = DbNetworkRequest(path, method)
+//        request.params = params
+//
+//        // -- Call Synchronously Task --
+//        val (responseBody, error) = doExecute(request)
+//
+//        // Update on thread, default is UI Thread
+//        withContext(threadCallback) {
+//            onResponse(responseBody, error)
+//        }
+//    }
 
-        val request = DbNetworkRequest(path, method)
-        request.params = params
-
-        // -- Call Synchronously Task --
-        val (responseBody, error) = doExecute(request)
-
-        // Update on thread, default is UI Thread
-        withContext(threadCallback) {
-            onResponse(responseBody, error)
-        }
-    }
 
 }
 
