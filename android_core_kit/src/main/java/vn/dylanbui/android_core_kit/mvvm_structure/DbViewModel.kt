@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import vn.dylanbui.android_core_kit.mvp_structure.DbNavigation
 import kotlin.coroutines.CoroutineContext
 
 
@@ -20,6 +21,8 @@ abstract class DbViewModel: ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext = job + Dispatchers.IO
+
+    open var nav: DbNavigation? = null
 
 //    private val liveData = MutableLiveData<String>()
 //

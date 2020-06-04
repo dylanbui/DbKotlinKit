@@ -42,15 +42,15 @@ abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Cla
     // open var viewModel: VM? = null
     val viewModel by lazy {
         // ViewModelProviders.of(this, getFactory()).get(modelClass)
-        viewModelProvider().get(modelClass)
+        val vm: T = viewModelProvider().get(modelClass)
+        vm.nav = nav
+        vm
     }
 
     // Inject dependencies once per life of Controller
     private val injectRunOnce by lazy { onPreAttach() }
 
     protected open fun setTitle(): String? = null
-
-    open fun showToolbar() : Boolean  = true
 
     init {
         // Van giu controller in Memory, khi push new controller
