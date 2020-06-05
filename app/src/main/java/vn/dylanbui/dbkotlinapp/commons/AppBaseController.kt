@@ -8,11 +8,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import vn.dylanbui.android_core_kit.DbError
 import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
 import vn.dylanbui.android_core_kit.networking.DbNetworkError
 import vn.dylanbui.android_core_kit.utils.DbUtils
+import vn.dylanbui.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollListener
 import vn.dylanbui.dbkotlinapp.R
 
 /**
@@ -25,6 +29,7 @@ import vn.dylanbui.dbkotlinapp.R
 
 abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle? = null): DbViewModelController<T>(modelClass, arg) {
 
+    //region Variables
     var toolbar: Toolbar? = null
     var tvTitle: TextView? = null
     var progressView: ViewGroup? = null // Loading for control, fill all screen
@@ -34,6 +39,14 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
     // var callPhoneUtils: CallPhoneUtils? = null
     open fun isShowToolbar() : Boolean  = true
 
+    // Combo RecyclerView
+//    var recyclerView: RecyclerView? = null
+//    var layoutRefresh: SwipeRefreshLayout? = null // Full to reload
+//    var scrollListener: DbEndlessRecyclerViewScrollListener? = null // Load more
+
+    //endregion
+
+    //region Controller LifeCycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view: View = super.onCreateView(inflater, container)
 
@@ -50,6 +63,7 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
 
         return view
     }
+    //endregion
 
     override fun onAttach(view: View) {
         super.onAttach(view)
@@ -74,7 +88,6 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
             }
         }
     }
-
 
     // -- Interface BaseMvpView --
 
@@ -108,6 +121,7 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
     }
 
     fun showError(error: DbError) {
+        hideProgressView()
         // Use Switch condition for more check case
         val networkError = error as? DbNetworkError
         networkError?.let {

@@ -11,14 +11,14 @@ import vn.dylanbui.dbkotlinapp.networking.TypicodeNetwork
 
 object TyUserApi {
 
-    fun getUser(callback: (List<TyUserUnit>, DbNetworkError?) -> Unit) {
-        val strUrl = "users"
-
-        TypicodeNetwork.doBasicRequest(TypicodeNetwork.makeLink(strUrl), DbNetworkMethod.GET) {
-                result: ArrayList<TyUserUnit>?, error: DbNetworkError? ->
-            callback(result ?: arrayListOf(), error)
-        }
-    }
+//    fun getUser(callback: (List<TyUserUnit>, DbNetworkError?) -> Unit) {
+//        val strUrl = "users"
+//
+//        TypicodeNetwork.doBasicRequest(TypicodeNetwork.makeLink(strUrl), DbNetworkMethod.GET) {
+//                result: ArrayList<TyUserUnit>?, error: DbNetworkError? ->
+//            callback(result ?: arrayListOf(), error)
+//        }
+//    }
 
 }
 

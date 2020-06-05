@@ -20,15 +20,12 @@ import vn.dylanbui.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollLis
 import vn.dylanbui.dbkotlinapp.MainActivity
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
+import vn.dylanbui.dbkotlinapp.commons.AppBaseController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 import java.text.FieldPosition
 
-class PostListViewController: DbViewModelController<PostViewModel>(PostViewModel::class.java) {
+class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::class.java) {
 
-    lateinit var recyclerView: RecyclerView
-    lateinit var layoutRefresh: SwipeRefreshLayout
-
-    private var scrollListener: DbEndlessRecyclerViewScrollListener? = null
     private lateinit var postAdapter: PostListAdapter
 
     override fun setTitle(): String? = "Title Post"
@@ -37,30 +34,15 @@ class PostListViewController: DbViewModelController<PostViewModel>(PostViewModel
         return inflater.inflate(R.layout.controller_post, container, false)
     }
 
+    override fun recyclerViewId(): Int? = R.id.cycView
+    override fun layoutRefreshId(): Int? = R.id.refreshLayout
+
+
     override fun onViewBound(view: View) {
-        recyclerView = view.findViewById(R.id.cycView)
-        layoutRefresh = view.findViewById(R.id.refreshLayout)
 
         // -- At here presenter == null --
         postAdapter = PostListAdapter()
-
-        var layoutManager = LinearLayoutManager(view.context)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = postAdapter
-
-        scrollListener = object : DbEndlessRecyclerViewScrollListener(layoutManager) {
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                // presenter.getUserList(page, false)
-                // presenter.getPostList(page)
-            }
-        }
-        recyclerView.addOnScrollListener(scrollListener!!)
-
-        layoutRefresh.setOnRefreshListener {
-            this.viewModel.posts(hashMapOf("1" to "x", "2" to "y", "-1" to "zz"))
-        }
-
+        recyclerView?.adapter = postAdapter
 
         this.viewModel.posts(hashMapOf("1" to "x")).observe(this, Observer { result ->
             this.view?.run {
@@ -70,26 +52,27 @@ class PostListViewController: DbViewModelController<PostViewModel>(PostViewModel
                 // Reload data
                 // if (page == 0) postAdapter.clearData()
                 when(result) {
-                    is DbResult.Loading -> showLoading()
+                    // is DbResult.Loading -> showLoading()
                     is DbResult.Success -> showItems(result.data)
-                    is DbResult.Error -> showError(result.message)
+                    is DbResult.Error -> showError(result.error)
                 }
 
                 //postAdapter.updateData(ArrayList(it.))
-                layoutRefresh.isRefreshing = false
+                layoutRefresh?.isRefreshing = false
                 // progressView?.visibility = View.GONE
             }
         })
 
 
-        this.viewModel.posts(hashMapOf("1" to "x")).observe (this, Observer(::handlerObserverResult))
+        // Day la cach thu 2 the hien cach dang ky
+        // this.viewModel.posts(hashMapOf("1" to "x")).observe (this, Observer(::handlerObserverResult))
     }
 
     private fun handlerObserverResult(result: DbResult<List<TyPostUnit>>) {
         when(result) {
             is DbResult.Loading -> showLoading()
             is DbResult.Success -> showItems(result.data)
-            is DbResult.Error -> showError(result.message)
+            is DbResult.Error -> showError(result.error)
         }
     }
 
@@ -139,6 +122,18 @@ class PostListViewController: DbViewModelController<PostViewModel>(PostViewModel
     }
 
     // -- interface PostListActionView --
+
+    override fun loadNextPage(page: Int) {
+//            this.viewModel.posts(hashMapOf("1" to "x", "2" to "y", "-1" to "zz"))
+    }
+
+    override fun pullToRefresh() {
+//            this.viewModel.posts(hashMapOf("1" to "x", "2" to "y", "-1" to "zz"))
+    }
+
+    fun showItems(items: List<TyPostUnit>) {
+        hideProgressView()
+    }
 
     /*
 

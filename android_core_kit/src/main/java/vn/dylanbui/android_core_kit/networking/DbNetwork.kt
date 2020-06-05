@@ -1,7 +1,10 @@
 package vn.dylanbui.android_core_kit.networking
 
 import android.util.Log
+import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -26,6 +29,18 @@ import kotlin.coroutines.CoroutineContext
 
 internal class SimpleResponse {
 
+    @SerializedName("code")
+    @Expose
+    var code: Int? = null
+
+    @SerializedName("message")
+    @Expose
+    var message: String? = null
+
+    @SerializedName("data")
+    @Expose
+    var data: JsonElement? = null // Phai la JsonElement (co the chua JsonObject, JsonArray, JsonNULL) khong de Any (Kotlin)
+
 }
 
 internal interface INetworkService {
@@ -45,7 +60,7 @@ internal interface INetworkService {
 // typealias DbPairResponse = Pair<DbResponse?, DbNetworkError?>
 
 // open class DbNetwork<M: DbResponse>(private var modelClass: Class<M>, private var baseUrl: String = "") {
-open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): CoroutineScope {
+public abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): CoroutineScope {
 
     // This launch uses the coroutineContext defined
     // by the coroutine presenter.
@@ -96,7 +111,7 @@ open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Coroutin
 
     // --- Network Utility Functions
 
-    inline fun <reified T> doBasicRequest(
+    public inline fun <reified T> doBasicRequest(
         path: String, method: DbNetworkMethod, params: DictionaryType? = null,
         threadCallback: CoroutineDispatcher = uiDispatcher,
         crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
@@ -106,12 +121,21 @@ open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Coroutin
         request.params = params
 
         // -- Call Asynchronously Task --
-        doBasicRequest<T>(request, threadCallback, onResponse)
+        // doBasicWithRequest<T>(request, threadCallback, onResponse)
+
+        // -- Call Synchronously Task --
+        val (responseBody, error) = doBasicExecute<T>(request)
+
+        // Update on thread, default is UI Thread
+        withContext(threadCallback) {
+            onResponse(responseBody, error)
+        }
+
     }
 
-    inline fun <reified T> doBasicRequest(request: DbNetworkRequest,
-                                          threadCallback: CoroutineDispatcher = uiDispatcher,
-                                          crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
+    public inline fun <reified T> doBasicRequest(request: DbNetworkRequest,
+                                                 threadCallback: CoroutineDispatcher = uiDispatcher,
+                                                 crossinline onResponse: (responseBody: T?, errorData: DbNetworkError?) -> Unit
     ) = launch(bgDispatcher) {
         // -- Call Synchronously Task --
         val (responseBody, error) = doBasicExecute<T>(request)
@@ -157,7 +181,7 @@ open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Coroutin
 
         // Xu ly ket qua tra ve
         var result: M? = null
-        var error: DbNetworkError? = null
+        var error: DbNetworkError?
 
         // Xu ly ket qua tra ve
         val resultJson: String? = readResponseCache(request.cache)
@@ -174,7 +198,7 @@ open abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Coroutin
 
         try {
             // if (response?.code() in 400..511)
-            val responseJsonBody: String? = response.body() as? String
+            val responseJsonBody: String? = response.body() as String
             if (response.isSuccessful && responseJsonBody != null) {
                 // Kiem tra loi trong body response
                 // Make response instance and parse json

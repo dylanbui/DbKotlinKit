@@ -15,6 +15,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import vn.dylanbui.android_core_kit.mvp_structure.*
 import vn.dylanbui.dbkotlinapp.App
 import vn.dylanbui.dbkotlinapp.app_controllers.splash_intro.SplashViewController
+import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post.PostListViewController
 
 //enum class ApplicationRoute : DbEnumRoute {
 //    //DefaultError inherited plus
@@ -44,10 +45,12 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 
         var vcl = SplashViewController()
 
+
         //var vcl = LoginViewController()
         //var vcl = UploadProgressController()
         // var vcl = FormatEditTextController()
 
+        vcl.nav = this
         router.setRoot(RouterTransaction.with(vcl))
 
 //        router.setRoot(RouterTransaction.with(FirstViewController())
@@ -57,13 +60,17 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 
     private fun splashPageComplete() {
 
-        var user = App.currentUser
-        if (user.isLogin()) {
-            // Da login roi, chuyen qua man hinh ds
-        } else {
-            // Chua login, chuyen qua man hinh login
-            // router.defaultSetRootController(LoginViewController())
-        }
+        router.defaultSetRootController(PostListViewController())
+
+//        var user = App.currentUser
+//        if (user.isLogin()) {
+//            // Da login roi, chuyen qua man hinh ds
+//        } else {
+//            // Chua login, chuyen qua man hinh login
+//            // router.defaultSetRootController(LoginViewController())
+//
+//            router.defaultSetRootController(PostListViewController())
+//        }
     }
 
     override fun navigate(toRoute: DbEnumRoute, context: Context?, parameters: Any?) {

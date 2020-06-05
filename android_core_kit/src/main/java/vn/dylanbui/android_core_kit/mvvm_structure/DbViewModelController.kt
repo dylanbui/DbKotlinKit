@@ -18,6 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.ActionBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
@@ -28,6 +31,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import vn.dylanbui.android_core_kit.DbError
 import vn.dylanbui.android_core_kit.DbMessageEvent
+import vn.dylanbui.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollListener
 
 interface ActionBarProvider {
     fun supportActionBar(): ActionBar?
@@ -67,6 +71,13 @@ abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Cla
 
     protected abstract fun inflateView(inflater: LayoutInflater, container: ViewGroup): View
 
+    var recyclerView: RecyclerView? = null
+    var layoutRefresh: SwipeRefreshLayout? = null // Full to reload
+    var scrollListener: DbEndlessRecyclerViewScrollListener? = null // Load more
+
+    open fun recyclerViewId(): Int? = null
+    open fun layoutRefreshId(): Int? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View
     {
         // -- inflateView for this Controller --
@@ -79,12 +90,39 @@ abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Cla
         // toolbar = view.findViewById(R.id.toolbar)
 //        toolbar?.title = setTitle()
 //        this.enableBackButton()
+
+        val layoutManager = LinearLayoutManager(view.context)
+        // Have support Recycler View
+        recyclerViewId()?.let {
+            recyclerView = view.findViewById(it)
+            recyclerView?.setHasFixedSize(true)
+            recyclerView?.layoutManager = layoutManager
+
+            scrollListener = object : DbEndlessRecyclerViewScrollListener(layoutManager) {
+                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                    loadNextPage(page)
+                }
+            }
+            recyclerView?.addOnScrollListener(scrollListener!!)
+
+        }
+        // Have support Layout Refresh
+        layoutRefreshId()?.let {
+            layoutRefresh = view.findViewById(it)
+            layoutRefresh?.setOnRefreshListener {
+                pullToRefresh()
+            }
+        }
+
         // -- Register Event Bus , At OnCreateView
         EventBus.getDefault().register(this)
         // -- Blind View for this Controller --
         onViewBound(view)
         return view
     }
+
+    open fun loadNextPage(page: Int) { }
+    open fun pullToRefresh() { }
 
     protected abstract fun onViewBound(view: View)
 

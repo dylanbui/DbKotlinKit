@@ -32,7 +32,7 @@ class PostViewModel: DbViewModel() {
         liveData.value = loading()
         TyPostApi.getPost { list, appNetworkServiceError ->
             appNetworkServiceError?.let {
-                liveData.value = errorResult(it.errorCode, it.errorMessage)
+                liveData.value = errorResult(it)
             }
             // Reload data
             liveData.value = successResult(list)

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RouterApp</string>
+    <string name="app_name">DbKotlinApp</string>
 
 
     <string name="greeting_loading_error">greeting loading error</string>

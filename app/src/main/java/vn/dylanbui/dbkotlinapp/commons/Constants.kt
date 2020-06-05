@@ -1,5 +1,7 @@
 package vn.dylanbui.dbkotlinapp.commons
 
+import vn.dylanbui.android_core_kit.DbError
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,13 +18,15 @@ sealed class DbResult<out T : Any> {
 
     object Loading : DbResult<Nothing>()
     object Empty : DbResult<Nothing>()
-    class Error(val code: Int, val message: String) : DbResult<Nothing>()
+    // class Error(val code: Int, val message: String) : DbResult<Nothing>()
+    class Error(val error: DbError) : DbResult<Nothing>()
 }
 
 inline fun <reified T : Any> successResult(data: T) = DbResult.Success(data)
 fun loading() = DbResult.Loading
 fun emptyResult() = DbResult.Empty
-fun errorResult(code: Int, message: String) = DbResult.Error(code, message)
+// fun errorResult(code: Int, message: String) = DbResult.Error(code, message)
+fun errorResult(error: DbError) = DbResult.Error(error)
 
 fun <K, V> lazyMap(initializer: (K) -> V): Map<K, V> {
     val map = mutableMapOf<K, V>()

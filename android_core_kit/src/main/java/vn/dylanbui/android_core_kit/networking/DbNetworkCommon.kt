@@ -37,7 +37,7 @@ enum class DbNetworkMethod(val method: String) {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),
-    DELETE("DELETE"),
+    // DELETE("DELETE"),
 }
 
 class DbNetworkError(var errorCode: Int, var errorMessage: String) : DbError

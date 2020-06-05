@@ -12,6 +12,7 @@ import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
 import vn.dylanbui.android_core_kit.utils.dLog
 
 import vn.dylanbui.dbkotlinapp.R
+import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 
 //internal class AnimatorListenerAdapter(
 //    val onStart: ((Animator) -> Unit)? = null,
@@ -41,7 +42,7 @@ class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewMod
     }
 
     override fun onPreAttach() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onViewBound(view: View)
@@ -56,58 +57,6 @@ class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewMod
                 tvAppVersion.text = "ViewModel created at: $it"
             }
         })
-
-
-//        btnFirst = view.findViewById(R.id.btnFirst)
-//        btnFirst.setOnClickListener { _ ->
-//            router.pushController(
-//                RouterTransaction.with(SecondViewController())
-//                    .pushChangeHandler(HorizontalChangeHandler())
-//                    .popChangeHandler(HorizontalChangeHandler()))
-//
-////            router.pushController(RouterTransaction.with(SecondViewController())
-////                .pushChangeHandler(FadeChangeHandler())
-////                .popChangeHandler(FadeChangeHandler()))
-//
-//        }
-//
-//        btnNext = view.findViewById(R.id.btnNextControl)
-//        btnNext.setOnClickListener { _ ->
-//            // Toast.makeText(applicationContext, "show ra loi", Toast.LENGTH_LONG).show()
-//            Toast.makeText(activity, "show ra loi", Toast.LENGTH_LONG).show()
-//        }
-
-
-//        CoroutinesNetwork.doRequest("districts/1", CoroutinesNetwork.Method.GET) {
-//                arrDistrict: List<DistrictUnit>?, error: ApiServiceError? ->
-//
-//            Log.d("TAG", " 1 ---- ${Thread.currentThread()} has run.")
-//
-//            if (error != null) {
-//                dLog("Loi cai me gi" + error.errorCode + " -- " + error.errorMessage)
-//                return@doRequest
-//            }
-//
-//            arrDistrict?.let {
-//
-//                for (district: DistrictUnit in it) {
-//                    dLog("  --- dictrict.districtName = " + district.districtName)
-//                }
-//
-//            }
-//
-//
-//        }
-
-
-
-
-
-
-
-
-
-
 
     }
 
@@ -154,8 +103,7 @@ class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewMod
     override fun onAnimationEnd(animation: Animator?) {
         Log.d("TAG", "onAnimationEnd")
         // activity?.toast("onAnimationEnd")
-
-        // nav?.navigate(ApplicationRoute.SplashPageComplete())
+        nav?.navigate(ApplicationRoute.SplashPageComplete())
     }
 
     override fun onAnimationCancel(animation: Animator?) {
