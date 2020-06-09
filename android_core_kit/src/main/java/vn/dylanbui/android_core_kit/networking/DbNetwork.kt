@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.HttpException
@@ -27,40 +28,28 @@ import vn.dylanbui.android_core_kit.utils.dLog
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
-internal class SimpleResponse {
-
-    @SerializedName("code")
-    @Expose
-    var code: Int? = null
-
-    @SerializedName("message")
-    @Expose
-    var message: String? = null
-
-    @SerializedName("data")
-    @Expose
-    var data: JsonElement? = null // Phai la JsonElement (co the chua JsonObject, JsonArray, JsonNULL) khong de Any (Kotlin)
-
-}
 
 internal interface INetworkService {
 
+    // ResponseBody la chuoi Json tra ve tu server response.body()?.string()
+
     // @Headers("Content-Type: application/json")
     @GET
-    suspend fun makeGetRequest(@Url url: String?): Response<SimpleResponse>
+    suspend fun makeGetRequest(@Url url: String?): Response<ResponseBody>
 
     @POST
-    suspend fun makePostRequest(@Url url: String?, @Body requestBody: RequestBody?): Response<SimpleResponse>
+    suspend fun makePostRequest(@Url url: String?, @Body requestBody: RequestBody?): Response<ResponseBody>
 
     @PUT
-    suspend fun makePutRequest(@Url url: String?, @Body requestBody: RequestBody?): Response<SimpleResponse>
+    suspend fun makePutRequest(@Url url: String?, @Body requestBody: RequestBody?): Response<ResponseBody>
 
 }
 
 // typealias DbPairResponse = Pair<DbResponse?, DbNetworkError?>
 
-// open class DbNetwork<M: DbResponse>(private var modelClass: Class<M>, private var baseUrl: String = "") {
-public abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): CoroutineScope {
+abstract class DbNetwork<RespType: DbResponse>(private var modelClass: Class<RespType>, var baseUrl: String = "")
+    : CoroutineScope {
+// public abstract class DbNetwork<RespType: DbResponse>(var baseUrl: String = ""): CoroutineScope {
 
     // This launch uses the coroutineContext defined
     // by the coroutine presenter.
@@ -177,33 +166,36 @@ public abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Corout
 
 
     // Ket qua tra ve luc nay, response da co gia tri, khong can kiem tra loi trong response
-    suspend fun doExecute(request: DbNetworkRequest): Pair<M?, DbNetworkError?> {
+    suspend fun doExecute(request: DbNetworkRequest): Pair<RespType?, DbNetworkError?> {
 
         // Xu ly ket qua tra ve
-        var result: M? = null
+        var result: RespType? = null
         var error: DbNetworkError?
 
         // Xu ly ket qua tra ve
         val resultJson: String? = readResponseCache(request.cache)
         if (resultJson != null) {
-            // val entity: M = modelClass.newInstance()
-            val entity: M = DbJson.instance.fromJson(resultJson, object : TypeToken<M>() {}.type)
+            // val entity: RespType = modelClass.newInstance()
+            val entity: RespType = DbJson.instance.fromJson(resultJson, object : TypeToken<RespType>() {}.type)
             entity.parseJsonResult(resultJson)
             // Success get from cache
             return Pair(entity, null)
         }
 
         // Default set Method GET
-        val response: Response<SimpleResponse> = makeCall(request.path, request.method, request.params)
+        val response: Response<ResponseBody> = makeCall(request.path, request.method, request.params)
 
         try {
             // if (response?.code() in 400..511)
-            val responseJsonBody: String? = response.body() as String
+            val responseJsonBody: String? = response.body()?.string() // as String
             if (response.isSuccessful && responseJsonBody != null) {
                 // Kiem tra loi trong body response
                 // Make response instance and parse json
-                val entity: M = DbJson.instance.fromJson(responseJsonBody, object : TypeToken<M>() {}.type)
-                // val entity: M = modelClass.newInstance()
+                // TODO: Khi dung thang nay kieu json tra ve phai la 1 object
+                // Luc dung thang nay voi server https://jsonplaceholder.typicode.com/posts
+                // Tra ve la 1 array nen ko parse dc
+                // val entity: RespType = DbJson.instance.fromJson(responseJsonBody, object : TypeToken<RespType>() {}.type)
+                val entity: RespType = modelClass.newInstance()
                 entity.parseJsonResult(responseJsonBody)
                 // Ket qua tra ve dung server, dung ket qua
                 if (entity.result == true) {
@@ -229,9 +221,9 @@ public abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Corout
     // Ham thuc hien cuoc goi va tra ve Response
     private suspend fun makeCall(path: String,
                                  method: DbNetworkMethod,
-                                 params: DictionaryType? = null): Response<SimpleResponse> {
+                                 params: DictionaryType? = null): Response<ResponseBody> {
         // Default set Method GET
-        lateinit var call: Response<SimpleResponse> //= makeApiService.makeGetRequest(path)
+        lateinit var call: Response<ResponseBody> //= makeApiService.makeGetRequest(path)
 
         // Luc nay da thuc hien cuoc goi
         when (method) {
@@ -274,7 +266,7 @@ public abstract class DbNetwork<M: DbResponse>(var baseUrl: String = ""): Corout
             cacheManager?.let {
                 return it.get(cache.key) as? String
 //                if (str != null) {
-//                    return DbJson.instance.fromJson(str, object : TypeToken<M>() {}.type)
+//                    return DbJson.instance.fromJson(str, object : TypeToken<RespType>() {}.type)
 //                }
             }
         }

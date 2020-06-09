@@ -34,7 +34,7 @@ class PzResponse: DbResponse() {
 
 }
 
-object PzNetwork : DbNetwork<PzResponse>() {
+object PzNetwork : DbNetwork<PzResponse>(PzResponse::class.java) {
 
     // Set at Application()
     override fun initWithBaseUrl(baseUrl: String, cacheManager: ICacheManager?, debugMode: Boolean) {

@@ -25,7 +25,7 @@ object TyUserApi {
 
 object TyPostApi {
 
-    fun getPost(callback: (ArrayList<TyPostUnit>, DbNetworkError?) -> Unit) {
+    fun getPosts(callback: (ArrayList<TyPostUnit>, DbNetworkError?) -> Unit) {
         val strUrl = "posts"
 
         TypicodeNetwork.doBasicRequest(TypicodeNetwork.makeLink(strUrl), DbNetworkMethod.GET) {

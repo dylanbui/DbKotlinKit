@@ -1,4 +1,4 @@
-package vn.dylanbui.dbkotlinapp.app_controllers.typicode.post
+package vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail
 
 import vn.dylanbui.android_core_kit.DictionaryType
 import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
@@ -15,18 +15,21 @@ import vn.dylanbui.dbkotlinapp.commons.*
  * To change this template use File | Settings | File and Code Templates.
  */
 
+const val KEY_MOVIE_ID = "KEY_MOVIE_ID"
 
-class PostViewModel: DbViewModel() {
+class PostDetailViewModel: DbViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
-    private val postsLiveData: Map<DictionaryType, DbLiveData<List<TyPostUnit>>> = lazyMap { parameters ->
+    private val postDetailLiveData: Map<DictionaryType, DbLiveData<TyPostUnit>> = lazyMap { parameters ->
         // Xu ly load du lieu bo vao LiveData, ket noi API hay tu database
-        val liveData = DbMubLiveData<List<TyPostUnit>>()
+        val liveData = DbMubLiveData<TyPostUnit>()
+        val postId = parameters[KEY_MOVIE_ID] as Int
+
         liveData.value = loading()
-        TyPostApi.getPosts { list, appNetworkServiceError ->
+        TyPostApi.getPostDetail(postId) { list, appNetworkServiceError ->
             appNetworkServiceError?.let {
                 liveData.value = errorResult(it)
-                return@getPosts
+                return@getPostDetail
             }
             // Reload data
             liveData.value = successResult(list)
@@ -34,7 +37,12 @@ class PostViewModel: DbViewModel() {
         return@lazyMap liveData
     }
 
-    fun posts(parameters: DictionaryType): DbLiveData<List<TyPostUnit>> = postsLiveData.getValue(parameters)
+    fun postDetail(parameters: DictionaryType): DbLiveData<TyPostUnit> = postDetailLiveData.getValue(parameters)
+
+    fun getPostDetail(postId: Int): DbLiveData<TyPostUnit> {
+        val parameters: DictionaryType = hashMapOf("postId" to postId)
+        return postDetailLiveData.getValue(parameters)
+    }
 
 
 //    private val ldPost = MutableLiveData<List<TyPostUnit>>()

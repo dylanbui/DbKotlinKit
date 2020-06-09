@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.ActionBar
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -39,7 +40,7 @@ interface ActionBarProvider {
 
 @Suppress("OverridingDeprecatedMember", "DEPRECATION")
 @SuppressWarnings("deprecation", "unused")
-abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle? = null): ViewModelController(arg)
+abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle = bundleOf()): ViewModelController(arg)
 {
     open var nav: DbNavigation? = null
 

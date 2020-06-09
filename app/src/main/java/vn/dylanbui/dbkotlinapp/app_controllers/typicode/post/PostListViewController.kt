@@ -1,30 +1,22 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.post
 
-import android.app.Activity
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import kotlinx.android.synthetic.main.controller_splash.view.*
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
-import vn.dylanbui.android_core_kit.utils.dLog
-import vn.dylanbui.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollListener
+import vn.dylanbui.android_core_kit.utils.toast
+import vn.dylanbui.android_core_kit.utils_adapter.OnDbAdapterListener
 import vn.dylanbui.dbkotlinapp.MainActivity
 import vn.dylanbui.dbkotlinapp.R
+import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailViewController
+import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.commons.AppBaseController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
-import java.text.FieldPosition
 
-class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::class.java) {
+class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::class.java), OnDbAdapterListener<TyPostUnit>
+    , PostDetailViewController.PostDetailControllerListener {
 
     private lateinit var postAdapter: PostListAdapter
 
@@ -41,22 +33,18 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
     override fun onViewBound(view: View) {
 
         // -- At here presenter == null --
-        postAdapter = PostListAdapter()
+        postAdapter = PostListAdapter(this)
         recyclerView?.adapter = postAdapter
 
         this.viewModel.posts(hashMapOf("1" to "x")).observe(this, Observer { result ->
             this.view?.run {
-                // text.text = "ViewModel created at: $it"
-//                dLog("ViewModel created at: $it")
-//                tvAppVersion.text = "ViewModel created at: $it"
                 // Reload data
                 // if (page == 0) postAdapter.clearData()
                 when(result) {
-                    // is DbResult.Loading -> showLoading()
+                    // is DbResult.Loading -> showLoading() // khong su dung do co su dung ProgressView() roi
                     is DbResult.Success -> showItems(result.data)
                     is DbResult.Error -> showError(result.error)
                 }
-
                 //postAdapter.updateData(ArrayList(it.))
                 layoutRefresh?.isRefreshing = false
                 // progressView?.visibility = View.GONE
@@ -76,19 +64,9 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
         }
     }
 
-//    private fun handlerObserverResult(result: SResult<List<GenreUI>>) {
-//        when(result) {
-//            is SResult.Loading -> showLoading()
-//            is SResult.Success -> showItems(result.data)
-//            is SResult.Error -> showError(result.message)
-//        }
-//    }
 
     override fun onPreAttach() {
         // -- At here presenter is existed --
-        // -- Get action in row => presenter --
-        // postAdapter.presenter = presenter
-        // presenter.getPostList(0)
     }
 
     override fun onAttach(view: View)
@@ -103,11 +81,6 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
         }
 
         Log.d("TAG", "onAttach")
-    }
-
-    override fun onActivityResumed(activity: Activity) {
-        // -- Call when Activity Resumed --
-        super.onActivityResumed(activity)
     }
 
     override fun onDetach(view: View) {
@@ -133,6 +106,16 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
 
     fun showItems(items: List<TyPostUnit>) {
         hideProgressView()
+        postAdapter.updateData(ArrayList(items))
+    }
+
+    override fun onSelectedItemListener(model: TyPostUnit, position: Int, view: View?) {
+        activity?.toast("No click vao tao: $position")
+        nav?.navigate(ApplicationRoute.GotoPostDetail(model.id!!, this))
+    }
+
+    override fun onTitlePicked(option: String?) {
+        activity?.toast(option ?: "option nullll")
     }
 
     /*

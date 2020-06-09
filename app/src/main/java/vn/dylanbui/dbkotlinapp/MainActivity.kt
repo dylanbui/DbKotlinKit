@@ -14,7 +14,7 @@ class MainActivity : DbBaseActivity() {
 
     private lateinit var container: ViewGroup
     private lateinit var router: Router
-    private var appCoordinator: AppCoordinator? = null
+    private lateinit var appCoordinator: AppCoordinator
 
     override fun getActivityLayoutId(): Int = R.layout.activity_main
 
@@ -32,7 +32,14 @@ class MainActivity : DbBaseActivity() {
         router = Conductor.attachRouter(this, container, savedInstanceState)
 
         appCoordinator = AppCoordinator(router)
-        appCoordinator?.start()
+        appCoordinator.start()
+    }
+
+    override fun onBackPressed()
+    {
+        if (!router.handleBack()) {
+            super.onBackPressed()
+        }
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

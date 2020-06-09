@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -27,11 +28,10 @@ import vn.dylanbui.dbkotlinapp.R
  * To change this template use File | Settings | File and Code Templates.
  */
 
-abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle? = null): DbViewModelController<T>(modelClass, arg) {
+abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle = bundleOf()): DbViewModelController<T>(modelClass, arg) {
 
     //region Variables
     var toolbar: Toolbar? = null
-    var tvTitle: TextView? = null
     var progressView: ViewGroup? = null // Loading for control, fill all screen
     var progressDialog: AlertDialog? = null // Loading for page
 
@@ -57,8 +57,6 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
             // this.callPhoneUtils = CallPhoneUtils(it)
         }
         toolbar = view.findViewById(R.id.toolbar)
-        tvTitle = view.findViewById(R.id.tvTitle)
-        tvTitle?.text = setTitle()
         this.enableBackButton(isShowToolbar())
 
         return view
@@ -72,6 +70,7 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
     open fun enableBackButton(isShowToolbar: Boolean) {
         // dLog("router.backstackSize = ${router.backstackSize}")
         toolbar?.let {
+            it.title = setTitle() // Set title for toolbar
             if (router.backstackSize > 1) {
                 it.setNavigationIcon(R.mipmap.ic_arrow_left)
                 it.setNavigationOnClickListener { _ ->

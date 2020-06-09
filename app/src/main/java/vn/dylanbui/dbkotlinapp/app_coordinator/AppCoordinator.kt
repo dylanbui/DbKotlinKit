@@ -8,6 +8,7 @@ package vn.dylanbui.dbkotlinapp.app_coordinator
  * To change this template use File | Settings | File and Code Templates.
  */
 
+import android.content.ComponentCallbacks
 import android.content.Context
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
@@ -16,6 +17,8 @@ import vn.dylanbui.android_core_kit.mvp_structure.*
 import vn.dylanbui.dbkotlinapp.App
 import vn.dylanbui.dbkotlinapp.app_controllers.splash_intro.SplashViewController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post.PostListViewController
+import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailViewController
+import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 
 //enum class ApplicationRoute : DbEnumRoute {
 //    //DefaultError inherited plus
@@ -27,7 +30,7 @@ import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post.PostListViewControl
 // Define enum nhu la 1 data class
 sealed class ApplicationRoute: DbEnumRoute {
     class SplashPageComplete() : ApplicationRoute()
-//    class GotoPostDetail(val post: TyPost) : ApplicationRoute()
+    class GotoPostDetail(val postId: Int, val listener: PostDetailViewController.PostDetailControllerListener?) : ApplicationRoute()
     class GotoPhUserDetail(val url: String, val caption: String) : ApplicationRoute()
     class GotoAnyWhere() : ApplicationRoute()
 }
@@ -60,7 +63,9 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 
     private fun splashPageComplete() {
 
-        router.defaultSetRootController(PostListViewController())
+        var vcl = PostListViewController()
+        vcl.nav = this
+        router.defaultSetRootController(vcl)
 
 //        var user = App.currentUser
 //        if (user.isLogin()) {
@@ -86,17 +91,14 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
                 this.splashPageComplete()
             }
 
-//            is ApplicationRoute.GotoPostDetail -> {
-//                var vcl = PostDetailViewController()
-//                vcl.tyPost = toRoute.post //(parameters as TyPost)
-//
+            is ApplicationRoute.GotoPostDetail -> {
+//                var vcl = PostDetailViewController(toRoute.postId, toRoute.listener)
 //                router.defaultPushController(vcl)
-//
-////                router.pushController(
-////                    RouterTransaction.with(vcl)
-////                        .pushChangeHandler(HorizontalChangeHandler())
-////                        .popChangeHandler(HorizontalChangeHandler()))
-//            }
+                if (toRoute.listener is Controller) {
+                    var vcl = PostDetailViewController(toRoute.postId, toRoute.listener)
+                    router.defaultPushController(vcl)
+                }
+            }
 
             is ApplicationRoute.GotoPhUserDetail -> {
 

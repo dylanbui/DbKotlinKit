@@ -1,5 +1,7 @@
 package vn.dylanbui.dbkotlinapp.commons
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import vn.dylanbui.android_core_kit.DbError
 
 
@@ -10,6 +12,8 @@ import vn.dylanbui.android_core_kit.DbError
  * Date: 6/2/20
  * To change this template use File | Settings | File and Code Templates.
  */
+
+// Config use for MVVM
 
 sealed class DbResult<out T : Any> {
     class Success<out T : Any>(
@@ -37,6 +41,8 @@ fun <K, V> lazyMap(initializer: (K) -> V): Map<K, V> {
     }
 }
 
+typealias DbLiveData<T> = LiveData<DbResult<T>>
+typealias DbMubLiveData<T> = MutableLiveData<DbResult<T>>
 
 /*
 

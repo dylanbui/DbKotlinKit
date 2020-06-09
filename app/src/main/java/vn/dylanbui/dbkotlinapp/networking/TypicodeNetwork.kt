@@ -27,6 +27,7 @@ class TyResponse: DbResponse() {
         try {
             // resultT = Gson().fromJson(jsonElement, object : TypeToken<T>() {}.type)
             this.data = DbJson.instance.fromJson(jsonString, JsonElement::class.java)
+            this.result = true
         } catch (e: JsonParseException) {
             dLog("JsonParseException : $e")
             this.result = false
@@ -38,7 +39,7 @@ class TyResponse: DbResponse() {
 }
 
 
-object TypicodeNetwork : DbNetwork<TyResponse>() {
+object TypicodeNetwork : DbNetwork<TyResponse>(TyResponse::class.java) {
 
     init {
         println("Singleton class invoked.")
