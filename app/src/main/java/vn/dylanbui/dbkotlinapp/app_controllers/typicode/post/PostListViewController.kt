@@ -9,14 +9,14 @@ import vn.dylanbui.android_core_kit.utils.toast
 import vn.dylanbui.android_core_kit.utils_adapter.OnDbAdapterListener
 import vn.dylanbui.dbkotlinapp.MainActivity
 import vn.dylanbui.dbkotlinapp.R
-import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailViewController
+import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailControllerListener
 import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.commons.AppBaseController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 
 class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::class.java), OnDbAdapterListener<TyPostUnit>
-    , PostDetailViewController.PostDetailControllerListener {
+    , PostDetailControllerListener {
 
     private lateinit var postAdapter: PostListAdapter
 

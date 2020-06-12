@@ -14,17 +14,18 @@ import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.commons.AppBaseController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 
+interface PostDetailControllerListener {
+    fun onTitlePicked(option: String?)
+}
 
-class PostDetailViewController<T: Controller>(args: Bundle):
-    AppBaseController<PostDetailViewModel>(PostDetailViewModel::class.java, args)
-        where T : PostDetailViewController.PostDetailControllerListener {
 
-    interface PostDetailControllerListener {
-        fun onTitlePicked(option: String?)
-    }
+class PostDetailViewController<T: PostDetailControllerListener>(args: Bundle):
+    AppBaseController<PostDetailViewModel>(PostDetailViewModel::class.java, args) {
 
     constructor(postId: Int, callbackController: T?) : this(bundleOf(KEY_MOVIE_ID to postId)) {
-        targetController = callbackController
+        if (callbackController is Controller && callbackController is PostDetailControllerListener) {
+            targetController = callbackController
+        }
     }
 
     private var postId: Int = 0
