@@ -54,7 +54,7 @@ abstract class DbBaseMvpController<V: MvpView, P: MvpPresenter<V>> : MvpControll
 
     protected abstract fun inflateView(inflater: LayoutInflater, container: ViewGroup): View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View
     {
         // -- inflateView for this Controller --
         val view: View = inflateView(inflater, container)

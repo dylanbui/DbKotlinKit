@@ -47,9 +47,9 @@ internal interface INetworkService {
 
 // typealias DbPairResponse = Pair<DbResponse?, DbNetworkError?>
 
-abstract class DbNetwork<RespType: DbResponse>(private var modelClass: Class<RespType>, var baseUrl: String = "")
+abstract class DbNetwork<ResType: DbResponse>(private var modelClass: Class<ResType>, var baseUrl: String = "")
     : CoroutineScope {
-// public abstract class DbNetwork<RespType: DbResponse>(var baseUrl: String = ""): CoroutineScope {
+// public abstract class DbNetwork<ResType: DbResponse>(var baseUrl: String = ""): CoroutineScope {
 
     // This launch uses the coroutineContext defined
     // by the coroutine presenter.
@@ -166,17 +166,17 @@ abstract class DbNetwork<RespType: DbResponse>(private var modelClass: Class<Res
 
 
     // Ket qua tra ve luc nay, response da co gia tri, khong can kiem tra loi trong response
-    suspend fun doExecute(request: DbNetworkRequest): Pair<RespType?, DbNetworkError?> {
+    suspend fun doExecute(request: DbNetworkRequest): Pair<ResType?, DbNetworkError?> {
 
         // Xu ly ket qua tra ve
-        var result: RespType? = null
+        var result: ResType? = null
         var error: DbNetworkError?
 
         // Xu ly ket qua tra ve
         val resultJson: String? = readResponseCache(request.cache)
         if (resultJson != null) {
-            // val entity: RespType = modelClass.newInstance()
-            val entity: RespType = DbJson.instance.fromJson(resultJson, object : TypeToken<RespType>() {}.type)
+            // val entity: ResType = modelClass.newInstance()
+            val entity: ResType = DbJson.instance.fromJson(resultJson, object : TypeToken<ResType>() {}.type)
             entity.parseJsonResult(resultJson)
             // Success get from cache
             return Pair(entity, null)
@@ -194,8 +194,8 @@ abstract class DbNetwork<RespType: DbResponse>(private var modelClass: Class<Res
                 // TODO: Khi dung thang nay kieu json tra ve phai la 1 object
                 // Luc dung thang nay voi server https://jsonplaceholder.typicode.com/posts
                 // Tra ve la 1 array nen ko parse dc
-                // val entity: RespType = DbJson.instance.fromJson(responseJsonBody, object : TypeToken<RespType>() {}.type)
-                val entity: RespType = modelClass.newInstance()
+                // val entity: ResType = DbJson.instance.fromJson(responseJsonBody, object : TypeToken<ResType>() {}.type)
+                val entity: ResType = modelClass.newInstance()
                 entity.parseJsonResult(responseJsonBody)
                 // Ket qua tra ve dung server, dung ket qua
                 if (entity.result == true) {
@@ -266,7 +266,7 @@ abstract class DbNetwork<RespType: DbResponse>(private var modelClass: Class<Res
             cacheManager?.let {
                 return it.get(cache.key) as? String
 //                if (str != null) {
-//                    return DbJson.instance.fromJson(str, object : TypeToken<RespType>() {}.type)
+//                    return DbJson.instance.fromJson(str, object : TypeToken<ResType>() {}.type)
 //                }
             }
         }

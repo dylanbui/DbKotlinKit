@@ -1,6 +1,7 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.splash_intro
 
 import android.animation.Animator
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewMod
     lateinit var animationView: LottieAnimationView
 
     override fun setTitle(): String = "Title first"
+
 
     private var updateDone: Boolean = false
 

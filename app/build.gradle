@@ -94,9 +94,16 @@ dependencies {
     implementation supportDependencies.eventbus
 
     // Conductor
-    implementation supportDependencies.conductor
-    implementation supportDependencies.conductorSupport
+//    implementation supportDependencies.conductor
+//    implementation supportDependencies.conductorSupport
 
+    implementation supportDependencies.conductor
+    // AndroidX Transition change handlers:
+    implementation supportDependencies.conductorTransition
+    // ViewPager PagerAdapter:
+    implementation supportDependencies.conductorViewpager
+    // Lifecycle-aware Controllers (architecture components):
+    implementation supportDependencies.conductorArchlifecycle
     // MVP Conductor Plugin
     implementation supportDependencies.conductorMvp
 

@@ -27,10 +27,12 @@ import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailVi
 
 // Define enum nhu la 1 data class
 sealed class ApplicationRoute: DbEnumRoute {
-    class SplashPageComplete() : ApplicationRoute()
+    class SplashPageComplete : ApplicationRoute()
     class GotoPostDetail<T: PostDetailControllerListener>(val postId: Int, val listener: T?) : ApplicationRoute()
     class GotoPhUserDetail(val url: String, val caption: String) : ApplicationRoute()
-    class GotoAnyWhere() : ApplicationRoute()
+    class GotoAnyWhere : ApplicationRoute()
+
+    class MakeItem : ApplicationRoute()
 }
 
 class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
@@ -57,6 +59,13 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 //        router.setRoot(RouterTransaction.with(FirstViewController())
 //            .pushChangeHandler(FadeChangeHandler())
 //            .popChangeHandler(FadeChangeHandler()))
+
+
+
+    }
+
+    override fun start(option: Any?) {
+
     }
 
     private fun splashPageComplete() {
@@ -74,6 +83,10 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 //
 //            router.defaultSetRootController(PostListViewController())
 //        }
+
+
+
+
     }
 
     override fun navigate(toRoute: DbEnumRoute, context: Context?, parameters: Any?) {
@@ -101,6 +114,14 @@ class AppCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 
             is ApplicationRoute.GotoAnyWhere -> {
 
+            }
+
+            is ApplicationRoute.MakeItem -> {
+                val create = CreateItemCoordinator(router)
+                create.finishedCoordinator = {
+
+                }
+                create.start()
             }
 
             else -> {

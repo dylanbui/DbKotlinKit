@@ -17,7 +17,9 @@ import com.bluelinelabs.conductor.Controller;
  * To change this template use File | Settings | File and Code Templates.
  */
 
-class ControllerLifecycleOwner extends Controller.LifecycleListener implements LifecycleOwner {
+
+
+class ControllerLifecycleOwner implements LifecycleOwner, Controller.LifecycleListener {
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
@@ -55,3 +57,4 @@ class ControllerLifecycleOwner extends Controller.LifecycleListener implements L
         return lifecycleRegistry;
     }
 }
+

@@ -46,9 +46,8 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
 
     //endregion
 
-    //region Controller LifeCycle
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view: View = super.onCreateView(inflater, container)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
+        val view: View = super.onCreateView(inflater, container, savedViewState)
 
         progressView = view.findViewById(R.id.progressView)
         activity?.let {

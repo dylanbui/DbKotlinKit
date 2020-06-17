@@ -79,7 +79,7 @@ abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Cla
     open fun recyclerViewId(): Int? = null
     open fun layoutRefreshId(): Int? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View
     {
         // -- inflateView for this Controller --
         val view: View = inflateView(inflater, container)

@@ -23,7 +23,8 @@ class PostDetailViewController<T: PostDetailControllerListener>(args: Bundle):
     AppBaseController<PostDetailViewModel>(PostDetailViewModel::class.java, args) {
 
     constructor(postId: Int, callbackController: T?) : this(bundleOf(KEY_MOVIE_ID to postId)) {
-        if (callbackController is Controller && callbackController is PostDetailControllerListener) {
+        // if (callbackController is Controller && callbackController is PostDetailControllerListener) {
+        if (callbackController is Controller) {
             targetController = callbackController
         }
     }
