@@ -16,14 +16,14 @@ import com.google.gson.annotations.SerializedName
 import io.reactivex.disposables.CompositeDisposable
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import vn.dylanbui.android_core_kit.permission_manager.DbPermissionManager
-import vn.dylanbui.android_core_kit.permission_manager.DbPermissionManagerImpl
-import vn.dylanbui.android_core_kit.utils.DbDeviceUtils
-import vn.dylanbui.android_core_kit.utils.DbLog
-import vn.dylanbui.android_core_kit.utils.DbSharedPreferences
 import vn.dylanbui.dbkotlinapp.networking.DbRealmCacheManager
 import vn.dylanbui.dbkotlinapp.networking.PzNetwork
 import vn.dylanbui.dbkotlinapp.networking.TypicodeNetwork
+import vn.propzy.android_core_kit.permission_manager.DbPermissionManager
+import vn.propzy.android_core_kit.permission_manager.DbPermissionManagerImpl
+import vn.propzy.android_core_kit.utils.DbDeviceUtils
+import vn.propzy.android_core_kit.utils.DbLog
+import vn.propzy.android_core_kit.utils.DbSharedPreferences
 
 class User {
     @SerializedName("userId")
@@ -102,7 +102,7 @@ class App : Application(), LifecycleObserver {
 
         versionApp = DbDeviceUtils.getVersionApp(this)
         deviceName = DbDeviceUtils.getDeviceName()
-        versionName = DbDeviceUtils.getVersionName()
+        // versionName = DbDeviceUtils.getVersionName()
 //        deviceToken = Utils.getDeviceToken() // Pai co Firebase
 //        Realm.init(this)
 //        val config = RealmConfiguration.Builder().name("surveyapp.realm").build()

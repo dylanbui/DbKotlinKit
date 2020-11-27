@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.controller_post.view.*
+import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.android_core_kit.utils.toast
 import vn.dylanbui.android_core_kit.utils_adapter.OnDbAdapterListener
 import vn.dylanbui.dbkotlinapp.MainActivity
@@ -12,10 +14,10 @@ import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailControllerListener
 import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
-import vn.dylanbui.dbkotlinapp.commons.AppBaseController
+import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 
-class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::class.java), OnDbAdapterListener<TyPostUnit>
+class PostListViewController: AppViewModelController<PostViewModel>(PostViewModel::class.java), OnDbAdapterListener<TyPostUnit>
     , PostDetailControllerListener {
 
     private lateinit var postAdapter: PostListAdapter
@@ -36,6 +38,22 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
         postAdapter = PostListAdapter(this)
         recyclerView?.adapter = postAdapter
 
+        this.viewModel.ldPost.observe(this, Observer { result ->
+            this.view?.run {
+                // Reload data
+                // if (page == 0) postAdapter.clearData()
+                when(result) {
+                    // is DbResult.Loading -> showLoading() // khong su dung do co su dung ProgressView() roi
+                    is DbResult.Success -> showItems(result.data)
+                    is DbResult.Error -> showError(result.error)
+                }
+                //postAdapter.updateData(ArrayList(it.))
+                layoutRefresh?.isRefreshing = false
+                // progressView?.visibility = View.GONE
+            }
+        })
+        // this.viewModel.getLiveDataPost()
+
         this.viewModel.posts(hashMapOf("1" to "x")).observe(this, Observer { result ->
             this.view?.run {
                 // Reload data
@@ -51,9 +69,13 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
             }
         })
 
-
         // Day la cach thu 2 the hien cach dang ky
         // this.viewModel.posts(hashMapOf("1" to "x")).observe (this, Observer(::handlerObserverResult))
+
+        view.btnNextControl.onClick {
+            nav?.navigate(ApplicationRoute.MakeItem())
+        }
+
     }
 
     private fun handlerObserverResult(result: DbResult<List<TyPostUnit>>) {
@@ -64,10 +86,6 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
         }
     }
 
-
-    override fun onPreAttach() {
-        // -- At here presenter is existed --
-    }
 
     override fun onAttach(view: View)
     {
@@ -102,6 +120,8 @@ class PostListViewController: AppBaseController<PostViewModel>(PostViewModel::cl
 
     override fun pullToRefresh() {
 //            this.viewModel.posts(hashMapOf("1" to "x", "2" to "y", "-1" to "zz"))
+        // this.viewModel.getLiveDataPost()
+        this.viewModel.posts(hashMapOf("1" to "x")) // chi goi dc co 1 lan thoi
     }
 
     fun showItems(items: List<TyPostUnit>) {

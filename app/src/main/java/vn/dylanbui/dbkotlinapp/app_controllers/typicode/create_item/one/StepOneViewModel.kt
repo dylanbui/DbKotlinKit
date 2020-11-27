@@ -1,8 +1,9 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.one
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
+import vn.dylanbui.dbkotlinapp.commons.DbLiveData
+import vn.dylanbui.dbkotlinapp.commons.DbMubLiveData
+import vn.dylanbui.dbkotlinapp.commons.successResult
 import java.util.*
 
 
@@ -16,14 +17,15 @@ import java.util.*
 
 class StepOneViewModel : DbViewModel() {
 
-    private val liveData = MutableLiveData<String>()
+    // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
 
-    init {
-        liveData.value = Date().toString()
+    private val liveData: DbLiveData<String> by lazy {
+        val liveData2 = DbMubLiveData<String>()
+        liveData2.value = successResult("StepOneViewModel : " + Date().toString())
+
+        return@lazy liveData2
     }
 
-    fun getLiveData(): LiveData<String> {
-        return liveData
-    }
+    fun getMyLiveData(): DbLiveData<String> = liveData
 
 }

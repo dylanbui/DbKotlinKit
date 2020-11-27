@@ -1,10 +1,11 @@
 package vn.dylanbui.dbkotlinapp.commons
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -12,13 +13,14 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import vn.dylanbui.android_core_kit.DbError
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
-import vn.dylanbui.android_core_kit.networking.DbNetworkError
-import vn.dylanbui.android_core_kit.utils.DbUtils
-import vn.dylanbui.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollListener
+
 import vn.dylanbui.dbkotlinapp.R
+import vn.propzy.android_core_kit.DbBaseActivity
+import vn.propzy.android_core_kit.DbError
+import vn.propzy.android_core_kit.mvvm_structure.DbBaseViewModel
+import vn.propzy.android_core_kit.mvvm_structure.DbViewModelController
+import vn.propzy.android_core_kit.utils.DbUtils
+import vn.propzy.android_core_kit.utils_adapter.DbEndlessRecyclerViewScrollListener
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,27 +30,33 @@ import vn.dylanbui.dbkotlinapp.R
  * To change this template use File | Settings | File and Code Templates.
  */
 
-abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T>, arg: Bundle = bundleOf()): DbViewModelController<T>(modelClass, arg) {
+abstract class AppViewModelController<T: DbBaseViewModel>(modelClass: Class<T>, arg: Bundle = bundleOf())
+    : DbViewModelController<T>(modelClass, arg) {
 
     //region Variables
+    var baseActivity: DbBaseActivity? = null
     var toolbar: Toolbar? = null
     var progressView: ViewGroup? = null // Loading for control, fill all screen
     var progressDialog: AlertDialog? = null // Loading for page
 
-    // var dialogUtils: SweetDialogUtils? = null // Custom dialog show message
-    // var callPhoneUtils: CallPhoneUtils? = null
-    open fun isShowToolbar() : Boolean  = true
+    abstract fun setTitle(): String
+    open fun isShowBackButton() : Boolean  = true
 
     // Combo RecyclerView
-//    var recyclerView: RecyclerView? = null
-//    var layoutRefresh: SwipeRefreshLayout? = null // Full to reload
-//    var scrollListener: DbEndlessRecyclerViewScrollListener? = null // Load more
+    var recyclerView: RecyclerView? = null
+    var layoutRefresh: SwipeRefreshLayout? = null // Full to reload
+    var scrollListener: DbEndlessRecyclerViewScrollListener? = null // Load more
+
+    open fun recyclerViewId(): Int? = null
+    open fun layoutRefreshId(): Int? = null
 
     //endregion
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
+
         val view: View = super.onCreateView(inflater, container, savedViewState)
 
+        baseActivity = activity as? DbBaseActivity
         progressView = view.findViewById(R.id.progressView)
         activity?.let {
             this.progressDialog = DbUtils.makeProgressDialog(it, getStringResource(R.string.loading_title))
@@ -56,17 +64,44 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
             // this.callPhoneUtils = CallPhoneUtils(it)
         }
         toolbar = view.findViewById(R.id.toolbar)
-        this.enableBackButton(isShowToolbar())
+        this.enableBackButton(isShowBackButton())
+
+        val layoutManager = LinearLayoutManager(view.context)
+        // Have support Recycler View
+        recyclerViewId()?.let {
+            recyclerView = view.findViewById(it)
+            recyclerView?.setHasFixedSize(true)
+            recyclerView?.layoutManager = layoutManager
+
+            scrollListener = object : DbEndlessRecyclerViewScrollListener(layoutManager) {
+                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                    loadNextPage(page)
+                }
+            }
+            recyclerView?.addOnScrollListener(scrollListener!!)
+
+        }
+        // Have support Layout Refresh
+        layoutRefreshId()?.let {
+            layoutRefresh = view.findViewById(it)
+            layoutRefresh?.setOnRefreshListener {
+                pullToRefresh()
+            }
+        }
 
         return view
     }
+
+    open fun loadNextPage(page: Int) { }
+    open fun pullToRefresh() { }
+
     //endregion
 
     override fun onAttach(view: View) {
         super.onAttach(view)
     }
 
-    open fun enableBackButton(isShowToolbar: Boolean) {
+    open fun enableBackButton(isEnableBack: Boolean) {
         // dLog("router.backstackSize = ${router.backstackSize}")
         toolbar?.let {
             it.title = setTitle() // Set title for toolbar
@@ -81,7 +116,7 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
                 it.navigationIcon = null
             }
             // Hide back button
-            if (!isShowToolbar) {
+            if (!isEnableBack) {
                 it.navigationIcon = null
             }
         }
@@ -121,11 +156,33 @@ abstract class AppBaseController<T: DbViewModel>(private var modelClass: Class<T
     fun showError(error: DbError) {
         hideProgressView()
         // Use Switch condition for more check case
-        val networkError = error as? DbNetworkError
-        networkError?.let {
-            showToast("errorCode: " + it.errorCode + " -- errorMessage: " + it.errorMessage)
+//        val networkError = error as? DbNetworkError
+//        networkError?.let {
+//            showToast("errorCode: " + it.errorCode + " -- errorMessage: " + it.errorMessage)
+//        }
+    }
+
+    // Keyboard Manager
+    fun hideKeyboard() {
+        activity?.let {
+            val imm = it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            var view = it.currentFocus
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
+    fun showKeyboard() {
+        activity?.let {
+            val imm = it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+        }
+    }
+
     //endregion
 
 }

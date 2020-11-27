@@ -1,13 +1,15 @@
 package vn.dylanbui.dbkotlinapp
 
 import android.os.Bundle
+import android.os.Handler
 
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 
-import vn.dylanbui.android_core_kit.DbBaseActivity
 import vn.dylanbui.dbkotlinapp.app_coordinator.AppCoordinator
+import vn.propzy.android_core_kit.DbBaseActivity
 
 
 class MainActivity : DbBaseActivity() {
@@ -35,11 +37,28 @@ class MainActivity : DbBaseActivity() {
         appCoordinator.start()
     }
 
-    override fun onBackPressed()
-    {
-        if (!router.handleBack()) {
-            super.onBackPressed()
+    override fun onBackPressed() {
+        val backStackList = router.backstack
+        if (backStackList.isNotEmpty()) {
+            if (backStackList.size <= 1) {
+                return handleDoubleBackPressExitApp()
+            } else {
+                return if (!router.handleBack()) super.onBackPressed() else return
+            }
         }
+    }
+
+    private var doubleBackToExitPressedOnce = false
+    private fun handleDoubleBackPressExitApp() {
+        if (doubleBackToExitPressedOnce) {
+            finishAffinity()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.common_press_back_again_to_exit), Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

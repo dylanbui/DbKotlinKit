@@ -127,7 +127,7 @@ abstract class DbViewModelController<T: DbViewModel>(private var modelClass: Cla
 
     protected abstract fun onViewBound(view: View)
 
-    protected abstract fun onPreAttach()
+    open fun onPreAttach() { }
 
     override fun onAttach(view: View) {
         // Call inject variable

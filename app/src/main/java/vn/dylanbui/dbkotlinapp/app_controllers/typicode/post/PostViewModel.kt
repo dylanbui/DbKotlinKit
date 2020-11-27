@@ -16,36 +16,46 @@ import vn.dylanbui.dbkotlinapp.commons.*
  */
 
 
-class PostViewModel: DbViewModel() {
+class PostViewModel : DbViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
-    private val postsLiveData: Map<DictionaryType, DbLiveData<List<TyPostUnit>>> = lazyMap { parameters ->
-        // Xu ly load du lieu bo vao LiveData, ket noi API hay tu database
-        val liveData = DbMubLiveData<List<TyPostUnit>>()
-        liveData.value = loading()
+    private val postsLiveData: Map<DictionaryType, DbLiveData<List<TyPostUnit>>> =
+        lazyMap { parameters ->
+            // Xu ly load du lieu bo vao LiveData, ket noi API hay tu database
+            val liveData = DbMubLiveData<List<TyPostUnit>>()
+            liveData.value = loading()
+            TyPostApi.getPosts { list, appNetworkServiceError ->
+                appNetworkServiceError?.let {
+                    liveData.value = errorResult(it)
+                    return@getPosts
+                }
+                // Reload data
+                liveData.value = successResult(list)
+            }
+            return@lazyMap liveData
+        }
+
+    fun posts(parameters: DictionaryType): DbLiveData<List<TyPostUnit>> =
+        postsLiveData.getValue(parameters)
+
+
+    open var ldPost = DbMubLiveData<List<TyPostUnit>>()
+
+    init {
+        ldPost.value = loading() //arrayListOf<TyPostUnit>()
+    }
+
+    fun getLiveDataPost() {
+        ldPost.value = loading()
         TyPostApi.getPosts { list, appNetworkServiceError ->
             appNetworkServiceError?.let {
-                liveData.value = errorResult(it)
+                ldPost.value = errorResult(it)
                 return@getPosts
             }
             // Reload data
-            liveData.value = successResult(list)
+            ldPost.value = successResult(list)
         }
-        return@lazyMap liveData
     }
-
-    fun posts(parameters: DictionaryType): DbLiveData<List<TyPostUnit>> = postsLiveData.getValue(parameters)
-
-
-//    private val ldPost = MutableLiveData<List<TyPostUnit>>()
-//
-//    init {
-//        ldPost.value = arrayListOf<TyPostUnit>()
-//    }
-//
-//    fun getLiveDataPost(): LiveData<List<TyPostUnit>> {
-//        return ldPost
-//    }
 //
 //    fun getPostList(page: Int = 0) {
 //        TyPostApi.getPost { list, appNetworkServiceError ->

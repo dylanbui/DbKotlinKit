@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:background="@color/black">
 
-        <com.dylanbui.android_library.camera.DbAutoFitTextureView
+        <vn.propzy.android_core_kit.camera.DbAutoFitTextureView
             android:id="@+id/textureView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_height="170dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="@color/blue_text_color">
+        android:background="@color/blue">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listImage"

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.controller_post_detail.view.*
 import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
-import vn.dylanbui.dbkotlinapp.commons.AppBaseController
+import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 
 interface PostDetailControllerListener {
@@ -20,7 +20,7 @@ interface PostDetailControllerListener {
 
 
 class PostDetailViewController<T: PostDetailControllerListener>(args: Bundle):
-    AppBaseController<PostDetailViewModel>(PostDetailViewModel::class.java, args) {
+    AppViewModelController<PostDetailViewModel>(PostDetailViewModel::class.java, args) {
 
     constructor(postId: Int, callbackController: T?) : this(bundleOf(KEY_MOVIE_ID to postId)) {
         // if (callbackController is Controller && callbackController is PostDetailControllerListener) {

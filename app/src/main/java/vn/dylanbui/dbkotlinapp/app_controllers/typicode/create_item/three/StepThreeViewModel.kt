@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import java.util.*
-
+import vn.dylanbui.dbkotlinapp.commons.*
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,14 +16,14 @@ import java.util.*
 
 class StepThreeViewModel : DbViewModel() {
 
-    private val liveData = MutableLiveData<String>()
+    // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
+    private val liveData: DbLiveData<String> by lazy {
+        val liveData = DbMubLiveData<String>()
+        liveData.value = successResult("Step TWO ViewModel : " + Date().toString())
 
-    init {
-        liveData.value = Date().toString()
+        return@lazy liveData
     }
 
-    fun getLiveData(): LiveData<String> {
-        return liveData
-    }
+    fun getMyLiveData(): DbLiveData<String> = liveData
 
 }

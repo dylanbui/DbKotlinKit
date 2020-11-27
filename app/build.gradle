@@ -65,65 +65,21 @@ dependencies {
     androidTestImplementation supportDependencies.testExtJunit
     androidTestImplementation supportDependencies.testEspressoCore
 
-    implementation supportDependencies.kotlinStdlibJdk7
-    implementation supportDependencies.appCompat
-    implementation supportDependencies.coreKtx
-    implementation supportDependencies.constraintLayout
-    implementation supportDependencies.design
-
-    // coroutines
-    implementation supportDependencies.coroutines
-    // gson
-    implementation supportDependencies.gson
-    // glide
-    implementation supportDependencies.glide
-
-    // Reactive
-    implementation supportDependencies.rxkotlin
-    implementation supportDependencies.rxandroid
-
-    // retrofit
-    implementation supportDependencies.retrofit
-    annotationProcessor supportDependencies.retrofit
-    implementation supportDependencies.retrofitRxjava
-    implementation supportDependencies.retrofitGson
-    implementation supportDependencies.retrofitLog
-    // implementation supportDependencies.picasso
-
-    // eventbus
-    implementation supportDependencies.eventbus
-
-    // Conductor
-//    implementation supportDependencies.conductor
-//    implementation supportDependencies.conductorSupport
-
-    implementation supportDependencies.conductor
-    // AndroidX Transition change handlers:
-    implementation supportDependencies.conductorTransition
-    // ViewPager PagerAdapter:
-    implementation supportDependencies.conductorViewpager
-    // Lifecycle-aware Controllers (architecture components):
-    implementation supportDependencies.conductorArchlifecycle
-    // MVP Conductor Plugin
-    implementation supportDependencies.conductorMvp
-
-    // Support application lifecycle
-    implementation supportDependencies.archLifecycle
-
     // ---------------- For App -------------------
 
+
     // Realm Extentions
-    implementation supportDependencies.kRealmExtensions
+    implementation "com.github.vicpinm:krealmextensions:2.5.0"
 
     // lottie
-    implementation supportDependencies.lottie
+    implementation "com.airbnb.android:lottie:2.7.0"
 
     // Google Services
-    implementation supportDependencies.ggServicesLocation
-    implementation supportDependencies.ggServicesAds
-    implementation supportDependencies.ggServicesGcm
-    implementation supportDependencies.ggServicesMaps
-    implementation supportDependencies.ggServicesPlaces
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
 
     // Firebase push notification
     implementation supportDependencies.firebaseMessaging

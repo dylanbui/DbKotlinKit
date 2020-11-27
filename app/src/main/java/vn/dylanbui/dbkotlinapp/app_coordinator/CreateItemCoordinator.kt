@@ -4,7 +4,10 @@ import android.content.Context
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import vn.dylanbui.android_core_kit.mvp_structure.*
+import vn.dylanbui.android_core_kit.utils.dLog
 import vn.dylanbui.dbkotlinapp.app_controllers.splash_intro.SplashViewController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.one.StepOneController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.three.StepThreeController
@@ -31,6 +34,8 @@ sealed class CreateItemRoute: DbEnumRoute {
 
 class CreateItemCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
 
+    private var backStack: List<RouterTransaction>? = null
+
     var finishedCoordinator: (()->Unit)? = null
 
     override var rootController: Controller = StepOneController().apply {
@@ -38,8 +43,8 @@ class CreateItemCoordinator(router: Router): BaseDbCoordinator(router), DbNaviga
     }
 
     override fun start() {
-
-        router.backstack
+        // Save back stack
+        this.backStack = router.backstack
 
         router.defaultPushModalController(this.rootController)
     }
@@ -55,15 +60,27 @@ class CreateItemCoordinator(router: Router): BaseDbCoordinator(router), DbNaviga
 
             is CreateItemRoute.StepOneComplete -> {
                 var vcl = StepTwoController()
+                vcl.nav = this
                 router.defaultPushController(vcl)
             }
 
             is CreateItemRoute.StepTwoComplete -> {
                 var vcl = StepThreeController()
+                vcl.nav = this
                 router.defaultPushController(vcl)
             }
 
             is CreateItemRoute.FinishedCreateItem -> {
+
+                dLog("11 router.backstackSize = ${router.backstackSize}")
+
+                this.backStack?.let {
+                    // router.setBackstack(it, FadeChangeHandler())
+                    router.setBackstack(it, VerticalChangeHandler())
+
+                    dLog("22 router.backstackSize = ${router.backstackSize}")
+                }
+
                 this.finishedCoordinator?.let { it() }
             }
 
