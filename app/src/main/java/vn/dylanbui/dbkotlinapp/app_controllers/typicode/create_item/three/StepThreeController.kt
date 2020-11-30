@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.controller_step_three.view.*
-import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_coordinator.CreateItemRoute
 import vn.dylanbui.dbkotlinapp.commons.DbResult
 import vn.dylanbui.dbkotlinapp.commons.*
+import vn.propzy.android_core_kit.utils.onClick
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,9 +24,8 @@ class StepThreeController: AppViewModelController<StepThreeViewModel>(StepThreeV
 
     override fun setTitle(): String = "Step 3"
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.controller_step_three, container, false)
-    }
+    override fun getControllerLayoutId(): Int = R.layout.controller_step_three
+
 
     override fun onPreAttach() {
 

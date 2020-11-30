@@ -1,5 +1,11 @@
-include ':android_core_kit'
-project(':android_core_kit').projectDir = new File(settingsDir, '../AndroidLib/android_core_kit')
-
-include ':app'
 rootProject.name='DbKotlinApp'
+
+include ':app', ':android_core_kit', ':android_ui_custom'
+
+project(':android_core_kit').projectDir = new File(settingsDir, '../AndroidLib/android_core_kit')
+project(':android_ui_custom').projectDir = new File(settingsDir, '../AndroidLib/android_ui_custom')
+
+
+
+
+

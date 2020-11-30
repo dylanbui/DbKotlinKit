@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.controller_splash.view.*
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModelController
-import vn.dylanbui.android_core_kit.utils.dLog
+
 
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
+import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
+import vn.propzy.android_core_kit.mvvm_structure.DbViewModelController
+import vn.propzy.android_core_kit.utils.dLog
 
 //internal class AnimatorListenerAdapter(
 //    val onStart: ((Animator) -> Unit)? = null,
@@ -30,18 +32,15 @@ import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 // Example: animationView.addAnimatorListener(AnimatorListenerAdapter(onEnd = { _ ->  }))
 
 
-class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewModel::class.java), Animator.AnimatorListener
+class SplashViewController: AppViewModelController<SplashViewModel>(SplashViewModel::class.java), Animator.AnimatorListener
 {
     lateinit var animationView: LottieAnimationView
 
     override fun setTitle(): String = "Title first"
 
-
     private var updateDone: Boolean = false
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.controller_splash, container, false)
-    }
+    override fun getControllerLayoutId(): Int = R.layout.controller_splash
 
     override fun onPreAttach() {
 
@@ -112,5 +111,7 @@ class SplashViewController: DbViewModelController<SplashViewModel>(SplashViewMod
         Log.d("TAG", "onAnimationCancel")
 
     }
+
+
 
 }

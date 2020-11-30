@@ -1,10 +1,8 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.three
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import java.util.*
 import vn.dylanbui.dbkotlinapp.commons.*
+import vn.propzy.android_core_kit.mvvm_structure.DbBaseViewModel
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +12,7 @@ import vn.dylanbui.dbkotlinapp.commons.*
  * To change this template use File | Settings | File and Code Templates.
  */
 
-class StepThreeViewModel : DbViewModel() {
+class StepThreeViewModel : DbBaseViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
     private val liveData: DbLiveData<String> by lazy {

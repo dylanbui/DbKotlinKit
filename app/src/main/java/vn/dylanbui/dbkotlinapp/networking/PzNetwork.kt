@@ -7,11 +7,10 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import vn.dylanbui.android_core_kit.DictionaryType
-import vn.dylanbui.android_core_kit.mvp_structure.bgDispatcher
-import vn.dylanbui.android_core_kit.mvp_structure.uiDispatcher
-import vn.dylanbui.android_core_kit.networking.*
-import vn.dylanbui.android_core_kit.utils.dLog
+import vn.propzy.android_core_kit.DictionaryType
+import vn.propzy.android_core_kit.mvp_structure.bgDispatcher
+import vn.propzy.android_core_kit.mvp_structure.uiDispatcher
+import vn.propzy.android_core_kit.utils.dLog
 
 
 /**

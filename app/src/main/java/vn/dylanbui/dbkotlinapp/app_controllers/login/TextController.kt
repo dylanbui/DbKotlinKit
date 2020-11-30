@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.controller_text.view.*
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.propzy.android_core_kit.utils.dLog
+import vn.propzy.android_ui_custom.html_edit_text.HtmlEditText
 
 
 /**
@@ -39,6 +40,8 @@ class TextController(args: Bundle): AppViewModelController<TextViewModel>(TextVi
         })
 
         view.tvTextView.text = args.getString(KEY_TEXT)
+
+
 
     }
 

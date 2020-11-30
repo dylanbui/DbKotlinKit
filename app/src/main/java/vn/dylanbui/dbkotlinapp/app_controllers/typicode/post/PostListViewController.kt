@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.controller_post.view.*
-import vn.dylanbui.android_core_kit.utils.onClick
-import vn.dylanbui.android_core_kit.utils.toast
-import vn.dylanbui.android_core_kit.utils_adapter.OnDbAdapterListener
 import vn.dylanbui.dbkotlinapp.MainActivity
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailControllerListener
@@ -16,13 +13,19 @@ import vn.dylanbui.dbkotlinapp.app_coordinator.ApplicationRoute
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
+import vn.propzy.android_core_kit.utils.onClick
+import vn.propzy.android_core_kit.utils.toast
+import vn.propzy.android_core_kit.utils_adapter.OnDbAdapterListener
 
-class PostListViewController: AppViewModelController<PostViewModel>(PostViewModel::class.java), OnDbAdapterListener<TyPostUnit>
+class PostListViewController: AppViewModelController<PostViewModel>(PostViewModel::class.java),
+    OnDbAdapterListener<TyPostUnit>
     , PostDetailControllerListener {
 
     private lateinit var postAdapter: PostListAdapter
 
-    override fun setTitle(): String? = "Title Post"
+    override fun setTitle(): String = "Title Post"
+
+    override fun getControllerLayoutId(): Int = R.layout.controller_post
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
         return inflater.inflate(R.layout.controller_post, container, false)

@@ -6,7 +6,6 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import vn.dylanbui.android_core_kit.networking.ICacheManager
 
 
 //interface ICacheManager {

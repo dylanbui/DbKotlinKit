@@ -103,5 +103,9 @@ dependencies {
 
     implementation project(':android_core_kit')
 
+     implementation project(':android_ui_custom')
+
+
+
 }
 

@@ -2,7 +2,7 @@ package vn.dylanbui.dbkotlinapp.commons
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import vn.dylanbui.android_core_kit.DbError
+import vn.propzy.android_core_kit.DbError
 
 
 /**
