@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.controller_step_two.view.btnNextControl
 import kotlinx.android.synthetic.main.controller_step_two.view.tvHello
-import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_coordinator.CreateItemRoute
 import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
+import vn.propzy.android_core_kit.utils.onClick
 
 
 /**
@@ -26,10 +26,7 @@ class StepTwoController: AppViewModelController<StepTwoViewModel>(StepTwoViewMod
 
     override fun setTitle(): String = "Step 2"
 
-
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.controller_step_two, container, false)
-    }
+    override fun getControllerLayoutId(): Int = R.layout.controller_step_two
 
     override fun onPreAttach() {
 

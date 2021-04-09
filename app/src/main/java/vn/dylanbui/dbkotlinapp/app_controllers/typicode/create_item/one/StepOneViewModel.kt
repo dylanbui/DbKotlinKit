@@ -1,9 +1,9 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.one
 
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import vn.dylanbui.dbkotlinapp.commons.DbLiveData
 import vn.dylanbui.dbkotlinapp.commons.DbMubLiveData
 import vn.dylanbui.dbkotlinapp.commons.successResult
+import vn.propzy.android_core_kit.mvvm_structure.DbBaseViewModel
 import java.util.*
 
 
@@ -15,7 +15,7 @@ import java.util.*
  * To change this template use File | Settings | File and Code Templates.
  */
 
-class StepOneViewModel : DbViewModel() {
+class StepOneViewModel : DbBaseViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
 

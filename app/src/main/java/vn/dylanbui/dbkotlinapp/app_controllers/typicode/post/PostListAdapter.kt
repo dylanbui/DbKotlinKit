@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 
 import kotlinx.android.synthetic.main.item_post.view.*
-import vn.dylanbui.android_core_kit.utils.onClick
-import vn.dylanbui.android_core_kit.utils_adapter.DbBaseRecyclerAdapter
-import vn.dylanbui.android_core_kit.utils_adapter.OnDbAdapterListener
+
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
+import vn.propzy.android_core_kit.utils.onClick
+import vn.propzy.android_core_kit.utils_adapter.DbBaseRecyclerAdapter
+import vn.propzy.android_core_kit.utils_adapter.OnDbAdapterListener
 
 
 class PostListAdapter(private var listener: OnDbAdapterListener<TyPostUnit>? = null) : DbBaseRecyclerAdapter<TyPostUnit>()

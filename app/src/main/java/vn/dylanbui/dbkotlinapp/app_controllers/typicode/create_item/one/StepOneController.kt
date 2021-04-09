@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.controller_step_one.view.*
-import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_coordinator.CreateItemRoute
 import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
+import vn.propzy.android_core_kit.utils.onClick
 
 
 /**
@@ -27,9 +27,8 @@ class StepOneController: AppViewModelController<StepOneViewModel>(StepOneViewMod
 
     override fun isShowBackButton(): Boolean = false
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.controller_step_one, container, false)
-    }
+    override fun getControllerLayoutId(): Int = R.layout.controller_step_one
+
 
     override fun onViewBound(view: View) {
 
@@ -55,4 +54,6 @@ class StepOneController: AppViewModelController<StepOneViewModel>(StepOneViewMod
             }
         })
     }
+
+
 }

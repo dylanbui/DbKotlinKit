@@ -6,8 +6,6 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
-import vn.dylanbui.android_core_kit.mvp_structure.*
-import vn.dylanbui.android_core_kit.utils.dLog
 import vn.dylanbui.dbkotlinapp.app_controllers.splash_intro.SplashViewController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.one.StepOneController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.three.StepThreeController
@@ -15,6 +13,8 @@ import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.two.StepTwoC
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post.PostListViewController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailControllerListener
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail.PostDetailViewController
+import vn.propzy.android_core_kit.mvp_structure.*
+import vn.propzy.android_core_kit.utils.dLog
 
 
 /**
@@ -32,7 +32,7 @@ sealed class CreateItemRoute: DbEnumRoute {
     class FinishedCreateItem : CreateItemRoute()
 }
 
-class CreateItemCoordinator(router: Router): BaseDbCoordinator(router), DbNavigation {
+class CreateItemCoordinator(router: Router): DbBaseCoordinator(router), DbNavigation {
 
     private var backStack: List<RouterTransaction>? = null
 
@@ -42,7 +42,7 @@ class CreateItemCoordinator(router: Router): BaseDbCoordinator(router), DbNaviga
         nav = this@CreateItemCoordinator
     }
 
-    override fun start() {
+    override fun start(isModal: Boolean, option: Any?) {
         // Save back stack
         this.backStack = router.backstack
 
