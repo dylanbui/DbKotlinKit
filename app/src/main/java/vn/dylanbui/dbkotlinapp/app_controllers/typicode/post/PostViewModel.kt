@@ -1,10 +1,10 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.post
 
-import vn.dylanbui.android_core_kit.DictionaryType
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.app_network.TyPostApi
 import vn.dylanbui.dbkotlinapp.commons.*
+import vn.propzy.android_core_kit.DictionaryType
+import vn.propzy.android_core_kit.mvvm_structure.DbBaseViewModel
 
 
 /**
@@ -16,7 +16,7 @@ import vn.dylanbui.dbkotlinapp.commons.*
  */
 
 
-class PostViewModel : DbViewModel() {
+class PostViewModel : DbBaseViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
     private val postsLiveData: Map<DictionaryType, DbLiveData<List<TyPostUnit>>> =
@@ -25,12 +25,12 @@ class PostViewModel : DbViewModel() {
             val liveData = DbMubLiveData<List<TyPostUnit>>()
             liveData.value = loading()
             TyPostApi.getPosts { list, appNetworkServiceError ->
-                appNetworkServiceError?.let {
-                    liveData.value = errorResult(it)
-                    return@getPosts
+                if (appNetworkServiceError != null) {
+                    liveData.value = errorResult(appNetworkServiceError)
+                } else {
+                    // Reload data
+                    liveData.value = successResult(list)
                 }
-                // Reload data
-                liveData.value = successResult(list)
             }
             return@lazyMap liveData
         }
@@ -48,12 +48,12 @@ class PostViewModel : DbViewModel() {
     fun getLiveDataPost() {
         ldPost.value = loading()
         TyPostApi.getPosts { list, appNetworkServiceError ->
-            appNetworkServiceError?.let {
-                ldPost.value = errorResult(it)
-                return@getPosts
+            if (appNetworkServiceError != null) {
+                ldPost.value = errorResult(appNetworkServiceError)
+            } else {
+                // Reload data
+                ldPost.value = successResult(list)
             }
-            // Reload data
-            ldPost.value = successResult(list)
         }
     }
 //

@@ -45,7 +45,6 @@ class AppCoordinator(router: Router): DbBaseCoordinator(router), DbNavigation {
 //    private var notificationCoordinator: NotificationCoordinator? = null
 
     override fun start(isModal: Boolean, option: Any?) {
-
         // var vcl = PostListViewController()
 
         var vcl = SplashViewController()

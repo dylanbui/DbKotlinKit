@@ -1,10 +1,10 @@
 package vn.dylanbui.dbkotlinapp.app_controllers.typicode.post_detail
 
-import vn.dylanbui.android_core_kit.DictionaryType
-import vn.dylanbui.android_core_kit.mvvm_structure.DbViewModel
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.app_network.TyPostApi
 import vn.dylanbui.dbkotlinapp.commons.*
+import vn.propzy.android_core_kit.DictionaryType
+import vn.propzy.android_core_kit.mvvm_structure.DbBaseViewModel
 
 
 /**
@@ -17,7 +17,7 @@ import vn.dylanbui.dbkotlinapp.commons.*
 
 const val KEY_MOVIE_ID = "KEY_MOVIE_ID"
 
-class PostDetailViewModel: DbViewModel() {
+class PostDetailViewModel: DbBaseViewModel() {
 
     // Day co the coi nhu la 1 ham, nhan tham so lay du lieu
     private val postDetailLiveData: Map<DictionaryType, DbLiveData<TyPostUnit>> = lazyMap { parameters ->
@@ -27,12 +27,12 @@ class PostDetailViewModel: DbViewModel() {
 
         liveData.value = loading()
         TyPostApi.getPostDetail(postId) { list, appNetworkServiceError ->
-            appNetworkServiceError?.let {
-                liveData.value = errorResult(it)
-                return@getPostDetail
+            if (appNetworkServiceError != null) {
+                liveData.value = errorResult(appNetworkServiceError)
+            } else {
+                // Reload data
+                liveData.value = successResult(list)
             }
-            // Reload data
-            liveData.value = successResult(list)
         }
         return@lazyMap liveData
     }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import kotlinx.android.synthetic.main.item_post.view.*
-
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.propzy.android_core_kit.utils.onClick

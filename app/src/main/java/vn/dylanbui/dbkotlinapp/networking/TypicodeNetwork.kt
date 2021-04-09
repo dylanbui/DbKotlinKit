@@ -3,12 +3,10 @@ package vn.dylanbui.dbkotlinapp.networking
 import android.text.TextUtils
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
-import vn.dylanbui.android_core_kit.networking.DbNetwork
-import vn.dylanbui.android_core_kit.networking.DbResponse
-import vn.dylanbui.android_core_kit.networking.ICacheManager
-import vn.dylanbui.android_core_kit.utils.DbJson
-import vn.dylanbui.android_core_kit.utils.dLog
+
 import vn.dylanbui.dbkotlinapp.App
+import vn.propzy.android_core_kit.utils.DbJson
+import vn.propzy.android_core_kit.utils.dLog
 
 
 /**

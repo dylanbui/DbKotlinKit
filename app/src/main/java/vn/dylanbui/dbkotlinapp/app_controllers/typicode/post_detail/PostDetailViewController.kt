@@ -8,11 +8,11 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import com.bluelinelabs.conductor.Controller
 import kotlinx.android.synthetic.main.controller_post_detail.view.*
-import vn.dylanbui.android_core_kit.utils.onClick
 import vn.dylanbui.dbkotlinapp.R
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
 import vn.dylanbui.dbkotlinapp.commons.AppViewModelController
 import vn.dylanbui.dbkotlinapp.commons.DbResult
+import vn.propzy.android_core_kit.utils.onClick
 
 interface PostDetailControllerListener {
     fun onTitlePicked(option: String?)
@@ -33,11 +33,9 @@ class PostDetailViewController<T: PostDetailControllerListener>(args: Bundle):
     private var tyPost: TyPostUnit? = null
 
     // No se chay sau: onViewBound
-    override fun setTitle(): String? = "Chi Tiết Post (ID:$postId)"
+    override fun setTitle(): String = "Chi Tiết Post (ID:$postId)"
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.controller_post_detail, container, false)
-    }
+    override fun getControllerLayoutId(): Int = R.layout.controller_post_detail
 
     override fun onViewBound(view: View) {
 

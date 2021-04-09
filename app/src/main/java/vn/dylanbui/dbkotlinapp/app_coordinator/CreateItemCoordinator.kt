@@ -4,8 +4,8 @@ import android.content.Context
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
+
 import vn.dylanbui.dbkotlinapp.app_controllers.splash_intro.SplashViewController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.one.StepOneController
 import vn.dylanbui.dbkotlinapp.app_controllers.typicode.create_item.three.StepThreeController

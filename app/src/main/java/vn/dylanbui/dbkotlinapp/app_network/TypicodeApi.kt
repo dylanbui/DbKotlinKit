@@ -1,12 +1,11 @@
 package vn.dylanbui.dbkotlinapp.app_network
 
 import android.util.Log
-import vn.dylanbui.android_core_kit.networking.DbNetworkError
-import vn.dylanbui.android_core_kit.networking.DbNetworkMethod
 import vn.dylanbui.dbkotlinapp.app_models.TyCommentUnit
 import vn.dylanbui.dbkotlinapp.app_models.TyPhotoUnit
 import vn.dylanbui.dbkotlinapp.app_models.TyPostUnit
-import vn.dylanbui.dbkotlinapp.app_models.TyUserUnit
+import vn.dylanbui.dbkotlinapp.networking.DbNetworkError
+import vn.dylanbui.dbkotlinapp.networking.DbNetworkMethod
 import vn.dylanbui.dbkotlinapp.networking.TypicodeNetwork
 
 object TyUserApi {

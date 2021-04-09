@@ -29,7 +29,6 @@ class StepOneController: AppViewModelController<StepOneViewModel>(StepOneViewMod
 
     override fun getControllerLayoutId(): Int = R.layout.controller_step_one
 
-
     override fun onViewBound(view: View) {
 
         view.btnNextControl.onClick {
